@@ -1,10 +1,10 @@
 {
-    "timestamp_utc": "2025-07-15T23:48:48.033468+00:00",
+    "timestamp_utc": "2025-07-15T23:59:18.115998+00:00",
     "market_vector": {
-        "price_usd": 117733.7
+        "price_usd": 117735.0
     },
     "mining_vector": {
-        "difficulty_change_percent": 2.0815737880861995,
+        "difficulty_change_percent": 1.885862271494787,
         "next_retarget_blocks": 1459,
         "estimated_retarget_date": "2025-07-25"
     },
