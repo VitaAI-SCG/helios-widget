@@ -1,4 +1,4 @@
-# helios_harvester.py (v1.4 - Final)
+# helios_harvester.py (v1.5 - Oracle Engine)
 import requests
 import json
 import urllib.request
@@ -11,45 +11,75 @@ OUTPUT_FILE = "data.json"
 KRAKEN_API_URL = "https://api.kraken.com/0/public/Ticker?pair=XBTUSD"
 MEMPOOL_API_URL = "https://mempool.space/api"
 
-# --- CORE LOGIC ---
+# --- AI ORACLE LOGIC ---
+def generate_narrative_vector(mining_vector, monetary_vector):
+    """
+    Generates a qualitative insight based on quantitative data.
+    """
+    try:
+        difficulty_change = mining_vector.get('difficulty_change_percent', 0)
+        blocks_to_retarget = mining_vector.get('next_retarget_blocks', 2016)
+        blocks_to_halving = monetary_vector.get('blocks_until_next_halving', 210000)
 
+        # Priority 1: Halving Event
+        if blocks_to_halving <= 10000:
+            narrative = "A supply shock is imminent. "
+            if difficulty_change > 1:
+                narrative += "Network security is hardening in anticipation."
+            elif difficulty_change < -1:
+                narrative += "Network efficiency is recalibrating ahead of the event."
+            else:
+                narrative += "Network security remains stable pre-halving."
+            return {"insight": narrative}
+
+        # Priority 2: Difficulty Adjustment Event
+        if blocks_to_retarget <= 144: # Less than a day away
+            narrative = "A difficulty adjustment is imminent. "
+            if difficulty_change > 2:
+                narrative += "A significant security increase is expected."
+            elif difficulty_change < -2:
+                narrative += "A significant efficiency gain is expected."
+            else:
+                narrative += "A minor recalibration is expected."
+            return {"insight": narrative}
+            
+        # Priority 3: General State
+        if difficulty_change > 2.5:
+            return {"insight": "Financial energy is consolidating as network security hardens significantly."}
+        elif difficulty_change < -2.5:
+            return {"insight": "Financial energy is consolidating as network efficiency increases."}
+        else:
+            return {"insight": "Financial energy is consolidating while the network maintains a stable security posture."}
+
+    except Exception as e:
+        print(f"[WARN] Failed to generate Narrative Vector: {e}")
+        return {"insight": "Data stream nominal. Awaiting deeper analysis."}
+
+# --- CORE LOGIC ---
+# (fetch_market_vector, fetch_mining_vector, calculate_monetary_vector remain the same as v1.4)
 def fetch_market_vector():
-    """
-    Fetches the Financial Energy vector: real-time price.
-    """
     try:
         response = requests.get(KRAKEN_API_URL, headers={"User-Agent": "Helios/1.0"})
         response.raise_for_status()
         data = response.json()
-        if data.get("error"):
-            print(f"[WARN] Kraken API returned an error: {data['error']}")
-            return None
+        if data.get("error"): return None
         result = data.get("result", {}).get("XXBTZUSD", {})
-        if result:
-            return {"price_usd": float(result.get('c', [0])[0])}
+        if result: return {"price_usd": float(result.get('c', [0])[0])}
         return None
     except Exception as e:
         print(f"[ERROR] Failed to fetch Market Vector: {e}")
         return None
 
 def fetch_mining_vector():
-    """
-    Fetches the Kinetic Energy vector.
-    """
     try:
         difficulty_url = "https://mempool.space/api/v1/difficulty-adjustment"
         req = urllib.request.Request(difficulty_url, headers={"User-Agent": "Helios/1.0"})
         with urllib.request.urlopen(req) as response:
-            if response.status != 200:
-                print(f"[ERROR] Mining Vector fetch failed with status code: {response.status}")
-                return None
+            if response.status != 200: return None
             raw_data = response.read().decode('utf-8')
             difficulty_data = json.loads(raw_data)
-        
-        # DEFINITIVE FIX: Convert timestamp from milliseconds to seconds
         retarget_timestamp_ms = difficulty_data.get('estimatedRetargetDate', 0)
         retarget_date = datetime.fromtimestamp(retarget_timestamp_ms / 1000, tz=timezone.utc).strftime('%Y-%m-%d')
-
         return {
             "difficulty_change_percent": difficulty_data.get('difficultyChange'),
             "next_retarget_blocks": difficulty_data.get('remainingBlocks'),
@@ -60,24 +90,17 @@ def fetch_mining_vector():
         return None
 
 def calculate_monetary_vector():
-    """
-    Calculates the Potential Energy vector: scarcity and issuance schedule.
-    """
     try:
         INITIAL_BLOCK_REWARD = 50.0
         HALVING_INTERVAL_BLOCKS = 210000
-
         height_url = f"{MEMPOOL_API_URL}/blocks/tip/height"
         response = requests.get(height_url, headers={"User-Agent": "Helios/1.0"})
         response.raise_for_status()
         current_block = int(response.text)
-
         halvings = current_block // HALVING_INTERVAL_BLOCKS
         blocks_since_last_halving = current_block % HALVING_INTERVAL_BLOCKS
-        
         current_reward = INITIAL_BLOCK_REWARD / (2 ** halvings)
         blocks_until_next_halving = HALVING_INTERVAL_BLOCKS - blocks_since_last_halving
-
         total_supply = 0
         reward = 50.0
         blocks_remaining_calc = current_block
@@ -86,7 +109,6 @@ def calculate_monetary_vector():
             total_supply += blocks_in_epoch * reward
             blocks_remaining_calc -= blocks_in_epoch
             reward /= 2
-
         return {
             "circulating_supply": total_supply,
             "current_block_reward": current_reward,
@@ -98,26 +120,24 @@ def calculate_monetary_vector():
         return None
 
 def main():
-    """
-    The main execution function. Fetches all vectors and writes to a file.
-    """
-    print(f"[{datetime.now().isoformat()}] Forging Helios Data Core...")
-
+    print(f"[{datetime.now().isoformat()}] Forging Helios Data Core with Oracle...")
     market_vector = fetch_market_vector()
     mining_vector = fetch_mining_vector()
     monetary_vector = calculate_monetary_vector()
 
     if not all([market_vector, mining_vector, monetary_vector]):
-        print("[ERROR] Failed to forge one or more vectors. Aborting file write.")
+        print("[ERROR] Failed to forge one or more primary vectors. Aborting.")
         return
+
+    narrative_vector = generate_narrative_vector(mining_vector, monetary_vector)
 
     helios_data = {
         "timestamp_utc": datetime.now(timezone.utc).isoformat(),
         "market_vector": market_vector,
         "mining_vector": mining_vector,
-        "monetary_vector": monetary_vector
+        "monetary_vector": monetary_vector,
+        "narrative_vector": narrative_vector
     }
-
     try:
         with open(OUTPUT_FILE, 'w') as f:
             json.dump(helios_data, f, indent=4)
