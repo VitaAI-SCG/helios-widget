@@ -12,7 +12,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
 
     <style>
-        /* APEX v2.0 Custom Styling */
+        /* APEX v2.1 (Mobile Scroll Fix) */
         :root {
             --glow-color: #ffae00;
             --core-color-1: rgba(255, 174, 0, 0.9);
@@ -28,7 +28,7 @@
             font-family: 'Inter', sans-serif;
             background-color: var(--bg-color);
             color: #f0f0f0;
-            overflow: hidden;
+            /* overflow: hidden;  <-- REMOVED THIS LINE TO ENABLE SCROLLING */
             background-image:
                 radial-gradient(ellipse at top left, rgba(255,174,0,0.1) 0%, transparent 50%),
                 radial-gradient(ellipse at bottom right, rgba(100,100,255,0.1) 0%, transparent 50%);
@@ -42,7 +42,6 @@
 
         .font-orbitron { font-family: 'Orbitron', sans-serif; }
 
-        /* The central pulsating core with more depth */
         .fusion-core-wrapper {
             position: relative;
             display: flex;
@@ -73,7 +72,6 @@
             position: relative;
         }
 
-        /* Refined "Glassmorphism" Data Panels */
         .data-panel {
             background-color: var(--panel-bg-color);
             backdrop-filter: blur(12px);
@@ -91,8 +89,11 @@
             transform: translateY(-8px) scale(1.02);
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3), 0 0 30px rgba(255,174,0,0.2) inset;
         }
+        #oracle-panel {
+            border-color: rgba(255, 152, 0, 0.4);
+            min-height: 80px;
+        }
 
-        /* Core Animations */
         @keyframes pulse-core {
             50% { transform: scale(1.05); }
         }
@@ -100,7 +101,6 @@
             50% { transform: scale(1.15); opacity: 0.8; }
         }
 
-        /* Staggered "Boot Up" Animation Sequence */
         @keyframes boot-sequence-fade-in {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
@@ -109,17 +109,14 @@
         .delay-2 { animation-delay: 0.4s; }
         .delay-3 { animation-delay: 0.6s; }
 
-        /* Power Surge Data Flash */
-        .flash {
-            animation: power-surge 0.7s ease-out;
-        }
+        .flash { animation: power-surge 0.7s ease-out; }
         @keyframes power-surge {
             0%   { color: var(--glow-color); text-shadow: 0 0 8px var(--glow-color); }
             100% { color: inherit; text-shadow: none; }
         }
     </style>
 </head>
-<body class="flex items-center justify-center min-h-full p-4">
+<body class="min-h-full py-12 px-4">
 
     <div id="helios-widget" class="w-full max-w-7xl mx-auto">
         
@@ -211,7 +208,9 @@
             updateElement(elements.halvingBlocks, `${parseInt(data.monetary_vector.blocks_until_next_halving).toLocaleString('en-US')} Blocks`, lastData.monetary_vector?.blocks_until_next_halving);
             updateElement(elements.halvingDate, data.monetary_vector.next_halving_estimated_date, lastData.monetary_vector?.next_halving_estimated_date);
             
-            updateElement(elements.insight, data.narrative_vector.insight, lastData.narrative_vector?.insight);
+            if (data.narrative_vector) {
+                updateElement(elements.insight, data.narrative_vector.insight, lastData.narrative_vector?.insight);
+            }
 
             elements.timestamp.textContent = `Data Core Forged: ${new Date(data.timestamp_utc).toLocaleString()}`;
             lastData = data;
@@ -232,7 +231,7 @@
         }
 
         fetchData();
-        setInterval(fetchData, 60000); // Check for new data from the harvester every minute
+        setInterval(fetchData, 60000);
     </script>
 </body>
 </html>
