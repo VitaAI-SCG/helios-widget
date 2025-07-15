@@ -1,17 +1,17 @@
 {
-    "timestamp_utc": "2025-07-15T23:24:26.958413+00:00",
+    "timestamp_utc": "2025-07-15T23:32:57.679521+00:00",
     "market_vector": {
-        "price_usd": 117670.1
+        "price_usd": 117625.0
     },
     "mining_vector": {
-        "difficulty_change_percent": 1.8033027882589314,
-        "next_retarget_blocks": 1463,
+        "difficulty_change_percent": 2.1946468597009883,
+        "next_retarget_blocks": 1460,
         "estimated_retarget_date": "2025-07-25"
     },
     "monetary_vector": {
-        "circulating_supply": 19892928.125,
+        "circulating_supply": 19892937.5,
         "current_block_reward": 3.125,
-        "blocks_until_next_halving": 144263,
+        "blocks_until_next_halving": 144260,
         "next_halving_estimated_date": "2028-04-12"
     }
 }
