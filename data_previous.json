@@ -1,18 +1,16 @@
 {
-    "timestamp_utc": "2025-07-16T01:41:45.984947+00:00",
+    "timestamp_utc": "2025-07-16T01:57:44.924533+00:00",
     "market_vector": {
-        "price_usd": 117710.0
+        "price_usd": 117700.0
     },
     "mining_vector": {
-        "difficulty_change_percent": 1.8070147661993552,
-        "next_retarget_blocks": 1449,
-        "estimated_retarget_date": "2025-07-25"
+        "difficulty_change_percent": 1.8742478582577826,
+        "next_retarget_blocks": 1447
     },
     "monetary_vector": {
-        "circulating_supply": 19892971.875,
+        "circulating_supply": 19892978.125,
         "current_block_reward": 3.125,
-        "blocks_until_next_halving": 144249,
-        "next_halving_estimated_date": "2028-04-12"
+        "blocks_until_next_halving": 144247
     },
     "speculative_vector": {
         "open_interest": 0,
@@ -20,8 +18,32 @@
         "error": true
     },
     "trend_vector": {
-        "rsi_14d": 67.80959933067972
+        "rsi_14d": 67.77241994288286,
+        "historical_prices": [
+            107115.4,
+            107325.1,
+            108387.2,
+            107120.3,
+            105700.1,
+            108846.9,
+            109631.0,
+            108018.9,
+            108249.5,
+            109223.2,
+            108282.1,
+            108931.9,
+            111323.7,
+            115990.2,
+            117532.6,
+            117461.0,
+            119102.1,
+            119855.0,
+            117741.0,
+            117699.9
+        ],
+        "price_change_percent": -0.008580409480932649
     },
+    "singularity_score": 58,
     "narrative_vector": {
         "insight": "The network is in a state of equilibrium, awaiting a new catalyst."
     }
