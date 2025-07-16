@@ -1,0 +1,25 @@
+{
+    "timestamp_utc": "2025-07-16T00:40:25.372654+00:00",
+    "market_vector": {
+        "price_usd": 117866.1
+    },
+    "mining_vector": {
+        "difficulty_change_percent": 2.033110922496517,
+        "next_retarget_blocks": 1454,
+        "estimated_retarget_date": "2025-07-25"
+    },
+    "monetary_vector": {
+        "circulating_supply": 19892956.25,
+        "current_block_reward": 3.125,
+        "blocks_until_next_halving": 144254,
+        "next_halving_estimated_date": "2028-04-12"
+    },
+    "speculative_vector": {
+        "open_interest": 0,
+        "funding_rate": 0,
+        "error": true
+    },
+    "narrative_vector": {
+        "insight": "Financial energy is surging with moderate speculative interest."
+    }
+}
