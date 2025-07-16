@@ -16,6 +16,8 @@
             --glow-color: #ffae00; --core-color-1: rgba(255, 174, 0, 0.9); --core-color-2: rgba(255, 107, 34, 0.7);
             --bg-color: #05020a; --panel-bg-color: rgba(22, 18, 32, 0.5); --border-color: rgba(255, 174, 0, 0.2);
             --border-hover-color: rgba(255, 174, 0, 0.6); --insight-border-color: rgba(255, 174, 0, 0.5);
+            /* RSI Gauge Colors */
+            --rsi-hot: #ff4500; --rsi-neutral: #cccccc; --rsi-cool: #00bfff;
         }
         body {
             font-family: 'Inter', sans-serif; background-color: var(--bg-color); color: #f0f0f0;
@@ -45,6 +47,9 @@
         .modal:target { visibility: visible; opacity: 1; }
         .modal-content { background: var(--bg-color); border-radius: 1rem; padding: 2rem; border: 1px solid var(--border-color); width: 90%; max-width: 400px; }
         .modal-close { position: absolute; top: 1.5rem; right: 1.5rem; color: #888; text-decoration: none; font-size: 1.5rem; }
+        /* RSI Momentum Gauge Styles */
+        .rsi-gauge { height: 120px; width: 20px; border: 2px solid var(--border-color); border-radius: 10px; background: linear-gradient(to top, var(--rsi-cool), var(--rsi-neutral) 50%, var(--rsi-hot)); position: relative; overflow: hidden; }
+        .rsi-level { position: absolute; bottom: 0; left: 0; right: 0; background-color: var(--bg-color); transition: height 0.5s ease-out; }
     </style>
 </head>
 <body class="min-h-full py-8 sm:py-12 px-4">
@@ -71,7 +76,7 @@
                     <h2 class="font-orbitron text-2xl mb-2 text-gray-300">Market Vector</h2>
                     <p class="font-orbitron text-6xl sm:text-7xl font-black text-orange-400" id="price-usd">...</p>
                 </div>
-                 <div id="oracle-panel" class="data-panel p-6 w-full text-center delay-3">
+                <div id="oracle-panel" class="data-panel p-6 w-full text-center delay-3">
                     <h2 class="font-orbitron text-xl text-orange-400/80 mb-2">CHRONOS INSIGHT</h2>
                     <p class="text-xl text-white font-medium" id="oracle-insight">Awaiting analysis...</p>
                 </div>
@@ -79,6 +84,7 @@
 
             <div class="space-y-8 order-3 lg:order-3 lg:col-span-1">
                 <div id="speculative-panel" class="data-panel p-6 delay-2"><h2 class="font-orbitron text-xl text-center mb-4 border-b border-orange-500/20 pb-2">Speculative Vector</h2><div class="space-y-4 text-md"><div class="flex justify-between items-baseline"><span class="text-gray-400">Open Interest:</span><span id="open-interest" class="font-bold text-white text-lg">...</span></div><div class="flex justify-between items-baseline"><span class="text-gray-400">Funding Rate:</span><span id="funding-rate" class="font-bold text-white text-lg">...</span></div></div></div>
+                <div id="trend-panel" class="data-panel p-6 delay-3"><h2 class="font-orbitron text-xl text-center mb-4 border-b border-orange-500/20 pb-2">Trend Vector</h2><div class="flex justify-between items-center"><div class="text-left"><p class="text-gray-400">14-Day RSI</p><p id="rsi-value" class="font-bold text-white text-3xl font-orbitron">...</p></div><div class="flex-shrink-0"><div class="rsi-gauge"><div id="rsi-level" class="rsi-level" style="height: 50%;"></div></div></div></div></div>
             </div>
         </div>
         
@@ -88,7 +94,100 @@
     <div id="fuel-modal" class="modal"><div class="modal-content text-center"><a href="#" class="modal-close" title="Close">×</a><h2 class="font-orbitron text-2xl text-orange-400 mb-4">Fuel the Core</h2><p class="mb-4">Scan the QR code or copy the address to support the mission.</p><img src="qr_code.png" alt="Bitcoin Deposit QR Code" class="w-48 h-48 mx-auto my-4 p-2 bg-white rounded-lg"><a href="bitcoin:bc1qn4h68x5327fmr4fvlv94t6vw0v8ck9z33m9jw8" class="block break-words text-sm text-gray-400 hover:text-white transition-colors">bc1qn4h68x5327fmr4fvlv94t6vw0v8ck9z33m9jw8</a><p class="text-xs text-gray-500 mt-4">Only send BTC to this address on the Bitcoin Network.</p></div></div>
 
     <script>
-        const elements={price:document.getElementById("price-usd"),supply:document.getElementById("circulating-supply"),reward:document.getElementById("block-reward"),halvingBlocks:document.getElementById("next-halving-blocks"),diffChange:document.getElementById("difficulty-change"),retargetBlocks:document.getElementById("next-retarget-blocks"),insight:document.getElementById("oracle-insight"),timestamp:document.getElementById("timestamp"),openInterest:document.getElementById("open-interest"),fundingRate:document.getElementById("funding-rate"),speculativePanel:document.getElementById("speculative-panel")};let lastData={};async function fetchData(){try{const e=await fetch(`data.json?v=${(new Date).getTime()}`);if(!e.ok)throw new Error(`Network response was not ok: ${e.statusText}`);const t=await e.json();updateDisplay(t)}catch(e){console.error("Failed to fetch Helios data:",e),elements.timestamp.textContent="Error: Could not load data core."}}function formatBillions(e){return e>1e9?`${(e/1e9).toFixed(2)}B`:e>1e6?`${(e/1e6).toFixed(2)}M`:e.toLocaleString("en-US",{maximumFractionDigits:0})}function updateDisplay(e){updateElement(elements.price,`$${parseFloat(e.market_vector.price_usd).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2})}`,lastData.market_vector?.price_usd);const t=parseFloat(e.mining_vector.difficulty_change_percent);updateElement(elements.diffChange,`${t.toFixed(2)}%`,lastData.mining_vector?.difficulty_change_percent,t>0?"text-green-400":"text-red-400"),updateElement(elements.retargetBlocks,`${parseInt(e.mining_vector.next_retarget_blocks).toLocaleString("en-US")} Blocks`,lastData.mining_vector?.next_retarget_blocks),updateElement(elements.supply,parseInt(e.monetary_vector.circulating_supply).toLocaleString("en-US"),lastData.monetary_vector?.circulating_supply),updateElement(elements.reward,`${e.monetary_vector.current_block_reward} BTC`,lastData.monetary_vector?.current_block_reward),updateElement(elements.halvingBlocks,`${parseInt(e.monetary_vector.blocks_until_next_halving).toLocaleString("en-US")} Blocks`,lastData.monetary_vector?.blocks_until_next_halving),e.speculative_vector&&!e.speculative_vector.error?(elements.speculativePanel.style.display="block",updateElement(elements.openInterest,`$${formatBillions(e.speculative_vector.open_interest)}`,lastData.speculative_vector?.open_interest),updateElement(elements.fundingRate,`${(100*e.speculative_vector.funding_rate).toFixed(4)}%`,lastData.speculative_vector?.funding_rate)):elements.speculativePanel.style.display="none",e.narrative_vector&&updateElement(elements.insight,e.narrative_vector.insight,lastData.narrative_vector?.insight),elements.timestamp.textContent=`Data Core Forged: ${new Date(e.timestamp_utc).toLocaleString()}`,lastData=e}function updateElement(e,t,o,a){if(!e)return;if(e.textContent!==t){e.textContent=t,e.classList.add("flash"),e.classList.remove("text-green-400","text-red-400","text-white"),a?e.classList.add(a):e.classList.add("text-white"),setTimeout(()=>e.classList.remove("flash"),700)}}fetchData(),setInterval(fetchData,60000);
+        const elements = {
+            price: document.getElementById('price-usd'),
+            supply: document.getElementById('circulating-supply'),
+            reward: document.getElementById('block-reward'),
+            halvingBlocks: document.getElementById('next-halving-blocks'),
+            diffChange: document.getElementById('difficulty-change'),
+            retargetBlocks: document.getElementById('next-retarget-blocks'),
+            insight: document.getElementById('oracle-insight'),
+            timestamp: document.getElementById('timestamp'),
+            openInterest: document.getElementById('open-interest'),
+            fundingRate: document.getElementById('funding-rate'),
+            speculativePanel: document.getElementById('speculative-panel'),
+            trendPanel: document.getElementById('trend-panel'),
+            rsiValue: document.getElementById('rsi-value'),
+            rsiLevel: document.getElementById('rsi-level')
+        };
+        let lastData = {};
+
+        async function fetchData() {
+            try {
+                const response = await fetch(`data.json?v=${new Date().getTime()}`);
+                if (!response.ok) {
+                    throw new Error(`Network response was not ok: ${response.statusText}`);
+                }
+                const data = await response.json();
+                updateDisplay(data);
+            } catch (error) {
+                console.error("Failed to fetch Helios data:", error);
+                elements.timestamp.textContent = "Error: Could not load data core.";
+            }
+        }
+
+        function formatBillions(num) {
+            if (!num) return '...';
+            if (num > 1e9) return `${(num / 1e9).toFixed(2)}B`;
+            if (num > 1e6) return `${(num / 1e6).toFixed(2)}M`;
+            return num.toLocaleString('en-US', { maximumFractionDigits: 0 });
+        }
+
+        function updateElement(el, newValue, oldValue, colorClass) {
+            if (!el || el.textContent === newValue) return;
+            el.textContent = newValue;
+            el.classList.add('flash');
+            el.classList.remove('text-green-400', 'text-red-400', 'text-white');
+            if (colorClass) {
+                el.classList.add(colorClass);
+            } else {
+                el.classList.add('text-white');
+            }
+            setTimeout(() => el.classList.remove('flash'), 700);
+        }
+
+        function updateDisplay(data) {
+            if (!data) return;
+            // Core Vectors
+            updateElement(elements.price, `$${parseFloat(data.market_vector.price_usd).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`, lastData.market_vector?.price_usd);
+            const diffChange = parseFloat(data.mining_vector.difficulty_change_percent);
+            updateElement(elements.diffChange, `${diffChange.toFixed(2)}%`, lastData.mining_vector?.difficulty_change_percent, diffChange > 0 ? 'text-green-400' : 'text-red-400');
+            updateElement(elements.retargetBlocks, `${parseInt(data.mining_vector.next_retarget_blocks).toLocaleString('en-US')} Blocks`, lastData.mining_vector?.next_retarget_blocks);
+            updateElement(elements.supply, parseInt(data.monetary_vector.circulating_supply).toLocaleString('en-US'), lastData.monetary_vector?.circulating_supply);
+            updateElement(elements.reward, `${data.monetary_vector.current_block_reward} BTC`, lastData.monetary_vector?.current_block_reward);
+            updateElement(elements.halvingBlocks, `${parseInt(data.monetary_vector.blocks_until_next_halving).toLocaleString('en-US')} Blocks`, lastData.monetary_vector?.blocks_until_next_halving);
+
+            // Speculative Vector (Anti-Fragile)
+            if (data.speculative_vector && !data.speculative_vector.error) {
+                elements.speculativePanel.style.display = 'block';
+                updateElement(elements.openInterest, `$${formatBillions(data.speculative_vector.open_interest)}`, lastData.speculative_vector?.open_interest);
+                updateElement(elements.fundingRate, `${(data.speculative_vector.funding_rate * 100).toFixed(4)}%`, lastData.speculative_vector?.funding_rate);
+            } else {
+                elements.speculativePanel.style.display = 'none';
+            }
+            
+            // Trend Vector (Anti-Fragile)
+            if (data.trend_vector && data.trend_vector.rsi_14d) {
+                elements.trendPanel.style.display = 'block';
+                const rsi = parseFloat(data.trend_vector.rsi_14d);
+                updateElement(elements.rsiValue, rsi.toFixed(1));
+                // The gauge level is inverse of the value (height of the mask)
+                elements.rsiLevel.style.height = `${100 - rsi}%`;
+            } else {
+                elements.trendPanel.style.display = 'none';
+            }
+
+            // Narrative Vector
+            if (data.narrative_vector) {
+                updateElement(elements.insight, data.narrative_vector.insight, lastData.narrative_vector?.insight);
+            }
+
+            elements.timestamp.textContent = `Data Core Forged: ${new Date(data.timestamp_utc).toLocaleString()}`;
+            lastData = data;
+        }
+
+        fetchData();
+        setInterval(fetchData, 60000);
     </script>
 </body>
 </html>
