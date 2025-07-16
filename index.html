@@ -63,17 +63,17 @@
             </div>
 
             <div class="flex flex-col items-center justify-center space-y-8 order-1 lg:order-2 lg:col-span-2">
-                <div class="data-panel p-8 w-full text-center delay-1">
+                <div class="fusion-core-wrapper delay-1 mt-4" style="animation: boot-sequence-fade-in 1s ease-out;">
+                    <div id="fusion-core-glow"></div>
+                    <div id="fusion-core"></div>
+                </div>
+                <div class="data-panel p-8 w-full text-center delay-2">
                     <h2 class="font-orbitron text-2xl mb-2 text-gray-300">Market Vector</h2>
                     <p class="font-orbitron text-6xl sm:text-7xl font-black text-orange-400" id="price-usd">...</p>
                 </div>
-                 <div id="oracle-panel" class="data-panel p-6 w-full text-center delay-1">
+                 <div id="oracle-panel" class="data-panel p-6 w-full text-center delay-3">
                     <h2 class="font-orbitron text-xl text-orange-400/80 mb-2">CHRONOS INSIGHT</h2>
                     <p class="text-xl text-white font-medium" id="oracle-insight">Awaiting analysis...</p>
-                </div>
-                <div class="fusion-core-wrapper delay-2 mt-4" style="animation: boot-sequence-fade-in 1s ease-out;">
-                    <div id="fusion-core-glow"></div>
-                    <div id="fusion-core"></div>
                 </div>
             </div>
 
@@ -88,7 +88,6 @@
     <div id="fuel-modal" class="modal"><div class="modal-content text-center"><a href="#" class="modal-close" title="Close">×</a><h2 class="font-orbitron text-2xl text-orange-400 mb-4">Fuel the Core</h2><p class="mb-4">Scan the QR code or copy the address to support the mission.</p><img src="qr_code.png" alt="Bitcoin Deposit QR Code" class="w-48 h-48 mx-auto my-4 p-2 bg-white rounded-lg"><a href="bitcoin:bc1qn4h68x5327fmr4fvlv94t6vw0v8ck9z33m9jw8" class="block break-words text-sm text-gray-400 hover:text-white transition-colors">bc1qn4h68x5327fmr4fvlv94t6vw0v8ck9z33m9jw8</a><p class="text-xs text-gray-500 mt-4">Only send BTC to this address on the Bitcoin Network.</p></div></div>
 
     <script>
-        // This JavaScript is identical to the previous version and requires no changes.
         const elements={price:document.getElementById("price-usd"),supply:document.getElementById("circulating-supply"),reward:document.getElementById("block-reward"),halvingBlocks:document.getElementById("next-halving-blocks"),diffChange:document.getElementById("difficulty-change"),retargetBlocks:document.getElementById("next-retarget-blocks"),insight:document.getElementById("oracle-insight"),timestamp:document.getElementById("timestamp"),openInterest:document.getElementById("open-interest"),fundingRate:document.getElementById("funding-rate"),speculativePanel:document.getElementById("speculative-panel")};let lastData={};async function fetchData(){try{const e=await fetch(`data.json?v=${(new Date).getTime()}`);if(!e.ok)throw new Error(`Network response was not ok: ${e.statusText}`);const t=await e.json();updateDisplay(t)}catch(e){console.error("Failed to fetch Helios data:",e),elements.timestamp.textContent="Error: Could not load data core."}}function formatBillions(e){return e>1e9?`${(e/1e9).toFixed(2)}B`:e>1e6?`${(e/1e6).toFixed(2)}M`:e.toLocaleString("en-US",{maximumFractionDigits:0})}function updateDisplay(e){updateElement(elements.price,`$${parseFloat(e.market_vector.price_usd).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2})}`,lastData.market_vector?.price_usd);const t=parseFloat(e.mining_vector.difficulty_change_percent);updateElement(elements.diffChange,`${t.toFixed(2)}%`,lastData.mining_vector?.difficulty_change_percent,t>0?"text-green-400":"text-red-400"),updateElement(elements.retargetBlocks,`${parseInt(e.mining_vector.next_retarget_blocks).toLocaleString("en-US")} Blocks`,lastData.mining_vector?.next_retarget_blocks),updateElement(elements.supply,parseInt(e.monetary_vector.circulating_supply).toLocaleString("en-US"),lastData.monetary_vector?.circulating_supply),updateElement(elements.reward,`${e.monetary_vector.current_block_reward} BTC`,lastData.monetary_vector?.current_block_reward),updateElement(elements.halvingBlocks,`${parseInt(e.monetary_vector.blocks_until_next_halving).toLocaleString("en-US")} Blocks`,lastData.monetary_vector?.blocks_until_next_halving),e.speculative_vector&&!e.speculative_vector.error?(elements.speculativePanel.style.display="block",updateElement(elements.openInterest,`$${formatBillions(e.speculative_vector.open_interest)}`,lastData.speculative_vector?.open_interest),updateElement(elements.fundingRate,`${(100*e.speculative_vector.funding_rate).toFixed(4)}%`,lastData.speculative_vector?.funding_rate)):elements.speculativePanel.style.display="none",e.narrative_vector&&updateElement(elements.insight,e.narrative_vector.insight,lastData.narrative_vector?.insight),elements.timestamp.textContent=`Data Core Forged: ${new Date(e.timestamp_utc).toLocaleString()}`,lastData=e}function updateElement(e,t,o,a){if(!e)return;if(e.textContent!==t){e.textContent=t,e.classList.add("flash"),e.classList.remove("text-green-400","text-red-400","text-white"),a?e.classList.add(a):e.classList.add("text-white"),setTimeout(()=>e.classList.remove("flash"),700)}}fetchData(),setInterval(fetchData,60000);
     </script>
 </body>
