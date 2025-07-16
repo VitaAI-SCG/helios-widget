@@ -12,7 +12,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
 
     <style>
-        /* APEX v2.1 (Mobile Scroll Fix) */
+        /* APEX v2.2 (Donation Modal) */
         :root {
             --glow-color: #ffae00;
             --core-color-1: rgba(255, 174, 0, 0.9);
@@ -23,12 +23,10 @@
             --border-hover-color: rgba(255, 174, 0, 0.6);
         }
 
-        /* Animated Background */
         body {
             font-family: 'Inter', sans-serif;
             background-color: var(--bg-color);
             color: #f0f0f0;
-            /* overflow: hidden;  <-- REMOVED THIS LINE TO ENABLE SCROLLING */
             background-image:
                 radial-gradient(ellipse at top left, rgba(255,174,0,0.1) 0%, transparent 50%),
                 radial-gradient(ellipse at bottom right, rgba(100,100,255,0.1) 0%, transparent 50%);
@@ -42,91 +40,64 @@
 
         .font-orbitron { font-family: 'Orbitron', sans-serif; }
 
-        .fusion-core-wrapper {
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+        .fusion-core-wrapper { position: relative; display: flex; align-items: center; justify-content: center; }
         #fusion-core-glow {
-            width: 250px;
-            height: 250px;
-            background: radial-gradient(circle, var(--core-color-2), transparent 70%);
-            border-radius: 50%;
-            position: absolute;
-            animation: pulse-glow 4s infinite ease-in-out;
-            filter: blur(20px);
+            width: 250px; height: 250px; background: radial-gradient(circle, var(--core-color-2), transparent 70%);
+            border-radius: 50%; position: absolute; animation: pulse-glow 4s infinite ease-in-out; filter: blur(20px);
         }
         #fusion-core {
-            width: 150px;
-            height: 150px;
-            background: radial-gradient(circle, var(--core-color-1), var(--core-color-2));
-            border-radius: 50%;
-            box-shadow:
-                0 0 15px var(--core-color-1),
-                0 0 30px var(--core-color-1),
-                0 0 50px var(--core-color-2),
-                inset 0 0 20px rgba(255, 255, 255, 0.6);
+            width: 150px; height: 150px; background: radial-gradient(circle, var(--core-color-1), var(--core-color-2));
+            border-radius: 50%; position: relative;
+            box-shadow: 0 0 15px var(--core-color-1), 0 0 30px var(--core-color-1), 0 0 50px var(--core-color-2), inset 0 0 20px rgba(255, 255, 255, 0.6);
             animation: pulse-core 4s infinite ease-in-out;
-            transition: transform 0.3s ease;
-            position: relative;
         }
 
         .data-panel {
-            background-color: var(--panel-bg-color);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid var(--border-color);
-            border-radius: 1rem;
+            background-color: var(--panel-bg-color); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--border-color); border-radius: 1rem;
             box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2), 0 0 20px rgba(255,174,0,0.1) inset;
-            transition: all 0.3s ease-in-out;
-            animation: boot-sequence-fade-in 1s ease-out forwards;
-            opacity: 0;
+            transition: all 0.3s ease-in-out; animation: boot-sequence-fade-in 1s ease-out forwards; opacity: 0;
         }
-
         .data-panel:hover {
-            border-color: var(--border-hover-color);
-            transform: translateY(-8px) scale(1.02);
+            border-color: var(--border-hover-color); transform: translateY(-8px) scale(1.02);
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3), 0 0 30px rgba(255,174,0,0.2) inset;
         }
-        #oracle-panel {
-            border-color: rgba(255, 152, 0, 0.4);
-            min-height: 80px;
-        }
-
-        @keyframes pulse-core {
-            50% { transform: scale(1.05); }
-        }
-        @keyframes pulse-glow {
-            50% { transform: scale(1.15); opacity: 0.8; }
-        }
-
-        @keyframes boot-sequence-fade-in {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .delay-1 { animation-delay: 0.2s; }
-        .delay-2 { animation-delay: 0.4s; }
-        .delay-3 { animation-delay: 0.6s; }
-
+        #oracle-panel { border-color: rgba(255, 152, 0, 0.4); min-height: 80px; }
+        @keyframes pulse-core { 50% { transform: scale(1.05); } }
+        @keyframes pulse-glow { 50% { transform: scale(1.15); opacity: 0.8; } }
+        @keyframes boot-sequence-fade-in { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .delay-1 { animation-delay: 0.2s; } .delay-2 { animation-delay: 0.4s; } .delay-3 { animation-delay: 0.6s; }
         .flash { animation: power-surge 0.7s ease-out; }
-        @keyframes power-surge {
-            0%   { color: var(--glow-color); text-shadow: 0 0 8px var(--glow-color); }
-            100% { color: inherit; text-shadow: none; }
+        @keyframes power-surge { 0% { color: var(--glow-color); text-shadow: 0 0 8px var(--glow-color); } 100% { color: inherit; text-shadow: none; } }
+
+        /* Donation Modal Styles */
+        .modal {
+            visibility: hidden; opacity: 0;
+            position: fixed; top: 0; right: 0; bottom: 0; left: 0;
+            display: flex; align-items: center; justify-content: center;
+            background: rgba(10, 5, 15, 0.8); backdrop-filter: blur(8px);
+            transition: all 0.4s;
+        }
+        .modal:target { visibility: visible; opacity: 1; }
+        .modal-content {
+            background: var(--bg-color); border-radius: 1rem; padding: 2rem;
+            border: 1px solid var(--border-color); width: 90%; max-width: 400px;
+        }
+        .modal-close {
+            position: absolute; top: 1.5rem; right: 1.5rem;
+            color: #888; text-decoration: none; font-size: 1.5rem;
         }
     </style>
 </head>
 <body class="min-h-full py-12 px-4">
 
     <div id="helios-widget" class="w-full max-w-7xl mx-auto">
-        
         <header class="text-center mb-8" style="animation: boot-sequence-fade-in 1s ease-out; animation-delay: 0s;">
             <h1 class="font-orbitron text-4xl md:text-5xl font-bold tracking-widest text-white">HELIOS</h1>
             <p class="text-lg text-gray-400">BITCOIN NETWORK CORE</p>
         </header>
 
         <main class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center">
-
             <div class="data-panel p-6 order-2 lg:order-1 delay-2">
                 <h2 class="font-orbitron text-2xl text-center mb-4 border-b border-orange-500/20 pb-2">Monetary Vector</h2>
                 <div class="space-y-4 text-lg">
@@ -164,11 +135,27 @@
         
         <footer class="text-center mt-12 text-gray-500" style="animation: boot-sequence-fade-in 1s ease-out; animation-delay: 1s;">
             <p id="timestamp">Awaiting data...</p>
-            <a href="#" id="fuel-the-core" class="mt-2 inline-block text-orange-400 hover:text-orange-300 hover:underline transition-colors">Fuel the Core</a>
+            <a href="#fuel-modal" class="mt-2 inline-block text-orange-400 hover:text-orange-300 hover:underline transition-colors text-lg">Fuel the Core</a>
         </footer>
     </div>
 
+    <div id="fuel-modal" class="modal">
+        <div class="modal-content text-center">
+            <a href="#" class="modal-close" title="Close">×</a>
+            <h2 class="font-orbitron text-2xl text-orange-400 mb-4">Fuel the Core</h2>
+            <p class="mb-4">Scan the QR code or copy the address to support the mission.</p>
+            
+            <img src="qr_code.png" alt="Bitcoin Deposit QR Code" class="w-48 h-48 mx-auto my-4 p-2 bg-white rounded-lg">
+            
+            <a href="bitcoin:bc1qn4h68x5327fmr4fvlv94t6vw0v8ck9z33m9jw8" class="block break-words text-sm text-gray-400 hover:text-white transition-colors">
+                bc1qn4h68x5327fmr4fvlv94t6vw0v8ck9z33m9jw8
+            </a>
+            <p class="text-xs text-gray-500 mt-4">Only send BTC to this address on the Bitcoin Network.</p>
+        </div>
+    </div>
+
     <script>
+        // --- DOM ELEMENT REFERENCES ---
         const elements = {
             price: document.getElementById('price-usd'),
             supply: document.getElementById('circulating-supply'),
@@ -181,12 +168,16 @@
             insight: document.getElementById('oracle-insight'),
             timestamp: document.getElementById('timestamp')
         };
+        
         let lastData = {};
 
+        // --- DATA FETCHING & UPDATING ---
         async function fetchData() {
             try {
                 const response = await fetch(`data.json?v=${new Date().getTime()}`);
-                if (!response.ok) throw new Error(`Network response was not ok: ${response.statusText}`);
+                if (!response.ok) {
+                    throw new Error(`Network response was not ok: ${response.statusText}`);
+                }
                 const data = await response.json();
                 updateDisplay(data);
             } catch (error) {
@@ -196,22 +187,27 @@
         }
 
         function updateDisplay(data) {
+            // Market Vector
             updateElement(elements.price, `$${parseFloat(data.market_vector.price_usd).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`, lastData.market_vector?.price_usd);
             
+            // Mining Vector
             const diffChange = parseFloat(data.mining_vector.difficulty_change_percent);
             updateElement(elements.diffChange, `${diffChange.toFixed(2)}%`, lastData.mining_vector?.difficulty_change_percent, diffChange > 0 ? 'text-green-400' : 'text-red-400');
             updateElement(elements.retargetBlocks, `${parseInt(data.mining_vector.next_retarget_blocks).toLocaleString('en-US')} Blocks`, lastData.mining_vector?.next_retarget_blocks);
             updateElement(elements.retargetDate, data.mining_vector.estimated_retarget_date, lastData.mining_vector?.estimated_retarget_date);
 
+            // Monetary Vector
             updateElement(elements.supply, parseInt(data.monetary_vector.circulating_supply).toLocaleString('en-US'), lastData.monetary_vector?.circulating_supply);
             updateElement(elements.reward, `${data.monetary_vector.current_block_reward} BTC`, lastData.monetary_vector?.current_block_reward);
             updateElement(elements.halvingBlocks, `${parseInt(data.monetary_vector.blocks_until_next_halving).toLocaleString('en-US')} Blocks`, lastData.monetary_vector?.blocks_until_next_halving);
             updateElement(elements.halvingDate, data.monetary_vector.next_halving_estimated_date, lastData.monetary_vector?.next_halving_estimated_date);
             
+            // Narrative Vector
             if (data.narrative_vector) {
                 updateElement(elements.insight, data.narrative_vector.insight, lastData.narrative_vector?.insight);
             }
 
+            // Timestamp
             elements.timestamp.textContent = `Data Core Forged: ${new Date(data.timestamp_utc).toLocaleString()}`;
             lastData = data;
         }
@@ -230,8 +226,9 @@
             }
         }
 
+        // --- INITIALIZATION ---
         fetchData();
-        setInterval(fetchData, 60000);
+        setInterval(fetchData, 60000); // Check for new data from the harvester every minute
     </script>
 </body>
 </html>
