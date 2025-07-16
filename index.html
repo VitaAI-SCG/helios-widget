@@ -4,13 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Helios :: Bitcoin Network Core</title>
-    
     <script src="https://cdn.tailwindcss.com"></script>
-    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
-
     <style>
         :root {
             --glow-color: #ffae00; --core-color-1: rgba(255, 174, 0, 0.9); --core-color-2: rgba(255, 107, 34, 0.7);
@@ -28,8 +25,17 @@
         @keyframes background-pan { from { background-position: 0% 0%; } to { background-position: 100% 100%; } }
         .font-orbitron { font-family: 'Orbitron', sans-serif; }
         .fusion-core-wrapper { position: relative; display: flex; align-items: center; justify-content: center; }
-        #fusion-core-glow { width: 250px; height: 250px; background: radial-gradient(circle, var(--core-color-2), transparent 70%); border-radius: 50%; position: absolute; animation: pulse-glow 4s infinite ease-in-out; filter: blur(20px); }
-        #fusion-core { width: 150px; height: 150px; background: radial-gradient(circle, var(--core-color-1), var(--core-color-2)); border-radius: 50%; position: relative; box-shadow: 0 0 15px var(--core-color-1), 0 0 30px var(--core-color-1), 0 0 50px var(--core-color-2), inset 0 0 20px rgba(255, 255, 255, 0.6); animation: pulse-core 4s infinite ease-in-out; }
+        #fusion-core-glow {
+            width: 250px; height: 250px; background: radial-gradient(circle, var(--core-color-2), transparent 70%);
+            border-radius: 50%; position: absolute; animation: pulse-glow 4s infinite ease-in-out; filter: blur(20px); transition: filter 0.5s ease-out;
+        }
+        #fusion-core {
+            width: 170px; height: 170px; background: radial-gradient(circle, var(--core-color-1), var(--core-color-2));
+            border-radius: 50%; position: relative;
+            box-shadow: 0 0 15px var(--core-color-1), 0 0 30px var(--core-color-1), 0 0 50px var(--core-color-2), inset 0 0 20px rgba(255, 255, 255, 0.6);
+            animation: pulse-core 4s infinite ease-in-out; display: flex; align-items: center; justify-content: center; flex-direction: column;
+            transition: filter 0.5s ease-out;
+        }
         .data-panel {
             background-color: var(--panel-bg-color); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
             border: 1px solid var(--border-color); border-radius: 1rem;
@@ -47,9 +53,9 @@
         .modal:target { visibility: visible; opacity: 1; }
         .modal-content { background: var(--bg-color); border-radius: 1rem; padding: 2rem; border: 1px solid var(--border-color); width: 90%; max-width: 400px; }
         .modal-close { position: absolute; top: 1.5rem; right: 1.5rem; color: #888; text-decoration: none; font-size: 1.5rem; }
-        /* RSI Momentum Gauge Styles */
         .rsi-gauge { height: 120px; width: 20px; border: 2px solid var(--border-color); border-radius: 10px; background: linear-gradient(to top, var(--rsi-cool), var(--rsi-neutral) 50%, var(--rsi-hot)); position: relative; overflow: hidden; }
         .rsi-level { position: absolute; bottom: 0; left: 0; right: 0; background-color: var(--bg-color); transition: height 0.5s ease-out; }
+        .sparkline { stroke: var(--glow-color); stroke-width: 2; fill: none; }
     </style>
 </head>
 <body class="min-h-full py-8 sm:py-12 px-4">
@@ -70,21 +76,21 @@
             <div class="flex flex-col items-center justify-center space-y-8 order-1 lg:order-2 lg:col-span-2">
                 <div class="fusion-core-wrapper delay-1 mt-4" style="animation: boot-sequence-fade-in 1s ease-out;">
                     <div id="fusion-core-glow"></div>
-                    <div id="fusion-core"></div>
+                    <div id="fusion-core">
+                        <span class="font-orbitron font-black text-5xl text-white" style="text-shadow: 0 0 10px #fff;" id="singularity-score">...</span>
+                        <span class="text-sm text-white/80 tracking-widest">MOMENTUM</span>
+                    </div>
                 </div>
                 <div class="data-panel p-8 w-full text-center delay-2">
-                    <h2 class="font-orbitron text-2xl mb-2 text-gray-300">Market Vector</h2>
+                    <div class="flex justify-between items-center"><h2 class="font-orbitron text-2xl text-gray-300">Market Vector</h2><svg id="price-sparkline" width="80" height="30" class="opacity-50"></svg></div>
                     <p class="font-orbitron text-6xl sm:text-7xl font-black text-orange-400" id="price-usd">...</p>
                 </div>
-                <div id="oracle-panel" class="data-panel p-6 w-full text-center delay-3">
-                    <h2 class="font-orbitron text-xl text-orange-400/80 mb-2">CHRONOS INSIGHT</h2>
-                    <p class="text-xl text-white font-medium" id="oracle-insight">Awaiting analysis...</p>
-                </div>
+                <div id="oracle-panel" class="data-panel p-6 w-full text-center delay-3"><h2 class="font-orbitron text-xl text-orange-400/80 mb-2">CHRONOS INSIGHT</h2><p class="text-xl text-white font-medium" id="oracle-insight">Awaiting analysis...</p></div>
             </div>
 
             <div class="space-y-8 order-3 lg:order-3 lg:col-span-1">
                 <div id="speculative-panel" class="data-panel p-6 delay-2"><h2 class="font-orbitron text-xl text-center mb-4 border-b border-orange-500/20 pb-2">Speculative Vector</h2><div class="space-y-4 text-md"><div class="flex justify-between items-baseline"><span class="text-gray-400">Open Interest:</span><span id="open-interest" class="font-bold text-white text-lg">...</span></div><div class="flex justify-between items-baseline"><span class="text-gray-400">Funding Rate:</span><span id="funding-rate" class="font-bold text-white text-lg">...</span></div></div></div>
-                <div id="trend-panel" class="data-panel p-6 delay-3"><h2 class="font-orbitron text-xl text-center mb-4 border-b border-orange-500/20 pb-2">Trend Vector</h2><div class="flex justify-between items-center"><div class="text-left"><p class="text-gray-400">14-Day RSI</p><p id="rsi-value" class="font-bold text-white text-3xl font-orbitron">...</p></div><div class="flex-shrink-0"><div class="rsi-gauge"><div id="rsi-level" class="rsi-level" style="height: 50%;"></div></div></div></div></div>
+                <div id="trend-panel" class="data-panel p-6 delay-3"><h2 class="font-orbitron text-xl text-center mb-4 border-b border-orange-500/20 pb-2">Trend Vector</h2><div class="flex justify-between items-center"><div class="text-left"><p class="text-gray-400">14-Day RSI</p><p id="rsi-value" class="font-bold text-white text-3xl font-orbitron">...</p></div><div class="flex items-center space-x-2"><svg id="rsi-sparkline" width="50" height="30" class="opacity-50"></svg><div class="rsi-gauge"><div id="rsi-level" class="rsi-level"></div></div></div></div></div>
             </div>
         </div>
         
@@ -108,16 +114,19 @@
             speculativePanel: document.getElementById('speculative-panel'),
             trendPanel: document.getElementById('trend-panel'),
             rsiValue: document.getElementById('rsi-value'),
-            rsiLevel: document.getElementById('rsi-level')
+            rsiLevel: document.getElementById('rsi-level'),
+            singularityScore: document.getElementById('singularity-score'),
+            fusionCore: document.getElementById('fusion-core'),
+            fusionCoreGlow: document.getElementById('fusion-core-glow'),
+            priceSparkline: document.getElementById('price-sparkline'),
+            rsiSparkline: document.getElementById('rsi-sparkline')
         };
         let lastData = {};
 
         async function fetchData() {
             try {
                 const response = await fetch(`data.json?v=${new Date().getTime()}`);
-                if (!response.ok) {
-                    throw new Error(`Network response was not ok: ${response.statusText}`);
-                }
+                if (!response.ok) throw new Error(`Network response was not ok: ${response.statusText}`);
                 const data = await response.json();
                 updateDisplay(data);
             } catch (error) {
@@ -126,11 +135,15 @@
             }
         }
 
-        function formatBillions(num) {
-            if (!num) return '...';
-            if (num > 1e9) return `${(num / 1e9).toFixed(2)}B`;
-            if (num > 1e6) return `${(num / 1e6).toFixed(2)}M`;
-            return num.toLocaleString('en-US', { maximumFractionDigits: 0 });
+        function generateSparkline(svg, data) {
+            if (!svg || !data || data.length < 2) return;
+            const width = svg.clientWidth;
+            const height = svg.clientHeight;
+            const max = Math.max(...data);
+            const min = Math.min(...data);
+            const range = max - min || 1;
+            const points = data.map((d, i) => `${i / (data.length - 1) * width},${height - (d - min) / range * height}`).join(" L ");
+            svg.innerHTML = `<path d="M ${points}" class="sparkline" />`;
         }
 
         function updateElement(el, newValue, oldValue, colorClass) {
@@ -148,36 +161,46 @@
 
         function updateDisplay(data) {
             if (!data) return;
-            // Core Vectors
+
             updateElement(elements.price, `$${parseFloat(data.market_vector.price_usd).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`, lastData.market_vector?.price_usd);
             const diffChange = parseFloat(data.mining_vector.difficulty_change_percent);
-            updateElement(elements.diffChange, `${diffChange.toFixed(2)}%`, lastData.mining_vector?.difficulty_change_percent, diffChange > 0 ? 'text-green-400' : 'text-red-400');
+            updateElement(elements.diffChange, `${diffChange.toFixed(2)}%`, lastData.mining_vector?.difficulty_change_percent, diffChange > 0 ? "text-green-400" : "text-red-400");
             updateElement(elements.retargetBlocks, `${parseInt(data.mining_vector.next_retarget_blocks).toLocaleString('en-US')} Blocks`, lastData.mining_vector?.next_retarget_blocks);
             updateElement(elements.supply, parseInt(data.monetary_vector.circulating_supply).toLocaleString('en-US'), lastData.monetary_vector?.circulating_supply);
             updateElement(elements.reward, `${data.monetary_vector.current_block_reward} BTC`, lastData.monetary_vector?.current_block_reward);
             updateElement(elements.halvingBlocks, `${parseInt(data.monetary_vector.blocks_until_next_halving).toLocaleString('en-US')} Blocks`, lastData.monetary_vector?.blocks_until_next_halving);
 
-            // Speculative Vector (Anti-Fragile)
             if (data.speculative_vector && !data.speculative_vector.error) {
                 elements.speculativePanel.style.display = 'block';
-                updateElement(elements.openInterest, `$${formatBillions(data.speculative_vector.open_interest)}`, lastData.speculative_vector?.open_interest);
+                updateElement(elements.openInterest, `$${(data.speculative_vector.open_interest / 1e9).toFixed(2)}B`, lastData.speculative_vector?.open_interest);
                 updateElement(elements.fundingRate, `${(data.speculative_vector.funding_rate * 100).toFixed(4)}%`, lastData.speculative_vector?.funding_rate);
             } else {
                 elements.speculativePanel.style.display = 'none';
             }
             
-            // Trend Vector (Anti-Fragile)
             if (data.trend_vector && data.trend_vector.rsi_14d) {
                 elements.trendPanel.style.display = 'block';
                 const rsi = parseFloat(data.trend_vector.rsi_14d);
                 updateElement(elements.rsiValue, rsi.toFixed(1));
-                // The gauge level is inverse of the value (height of the mask)
                 elements.rsiLevel.style.height = `${100 - rsi}%`;
+                if (data.trend_vector.historical_prices) {
+                    generateSparkline(elements.priceSparkline, data.trend_vector.historical_prices);
+                    // Create a synthetic RSI history for the sparkline, as it's not provided by the API
+                    const rsiHistory = data.trend_vector.historical_prices.map((p, i, arr) => i < 14 ? 50 : rsi - (arr.length - 1 - i) * 0.5);
+                    generateSparkline(elements.rsiSparkline, rsiHistory);
+                }
             } else {
                 elements.trendPanel.style.display = 'none';
             }
 
-            // Narrative Vector
+            if (data.singularity_score) {
+                const score = data.singularity_score;
+                updateElement(elements.singularityScore, score);
+                const hue = (score / 100) * 60 - 30; // Shift hue from red (-30) to green (+30)
+                elements.fusionCore.style.filter = `hue-rotate(${hue}deg)`;
+                elements.fusionCoreGlow.style.filter = `blur(20px) hue-rotate(${hue}deg)`;
+            }
+
             if (data.narrative_vector) {
                 updateElement(elements.insight, data.narrative_vector.insight, lastData.narrative_vector?.insight);
             }
