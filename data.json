@@ -1,10 +1,10 @@
 {
-    "timestamp_utc": "2025-07-16T20:52:00.452141+00:00",
+    "timestamp_utc": "2025-07-16T20:55:11.915035+00:00",
     "market_vector": {
-        "price_usd": 119770.0
+        "price_usd": 119770.1
     },
     "mining_vector": {
-        "difficulty_change_percent": 1.6432826025039482,
+        "difficulty_change_percent": 1.5952232421352797,
         "next_retarget_blocks": 1333
     },
     "monetary_vector": {
@@ -41,12 +41,12 @@
             117741.0,
             119770.1
         ],
-        "price_change_percent": -0.013357142439732156
+        "price_change_percent": 8.349336228255887e-05
     },
     "singularity_score": 59,
     "narrative_vector": {
         "primary": "Market sentiment is overheated (RSI: 71). A correction is probable.",
         "market": "Momentum is neutral (RSI: 71.1). The derivatives market is balanced.",
-        "network": "The 1.64% difficulty adjustment indicates the security baseline is currently hardening."
+        "network": "The 1.60% difficulty adjustment indicates the security baseline is currently hardening."
     }
 }
