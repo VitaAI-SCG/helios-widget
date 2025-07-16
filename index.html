@@ -4,15 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Helios :: Bitcoin Network Core</title>
+    
     <script src="https://cdn.tailwindcss.com"></script>
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+
     <style>
         :root {
             --glow-color: #ffae00; --core-color-1: rgba(255, 174, 0, 0.9); --core-color-2: rgba(255, 107, 34, 0.7);
             --bg-color: #05020a; --panel-bg-color: rgba(22, 18, 32, 0.5); --border-color: rgba(255, 174, 0, 0.2);
             --border-hover-color: rgba(255, 174, 0, 0.6); --insight-border-color: rgba(255, 174, 0, 0.5);
+            /* RSI Gauge Colors */
             --rsi-hot: #ff4500; --rsi-neutral: #cccccc; --rsi-cool: #00bfff;
             /* -- Dynamic CSS variables for the Living Core -- */
             --core-pulse-duration: 4s;
@@ -62,6 +66,9 @@
         .tooltip-container { position: relative; display: inline-block; cursor: help; }
         .tooltip-text { visibility: hidden; width: 220px; background-color: #111; color: #fff; text-align: center; border-radius: 6px; padding: 8px; position: absolute; z-index: 1; bottom: 125%; left: 50%; margin-left: -110px; opacity: 0; transition: opacity 0.3s; font-size: 0.8rem; }
         .tooltip-container:hover .tooltip-text { visibility: visible; opacity: 1; }
+        .insight-button { background-color: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; transition: all 0.2s ease; cursor: pointer; }
+        .insight-button:hover { background-color: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2); }
+        .insight-button.active { background-color: var(--glow-color); color: #000; border-color: var(--glow-color); font-weight: bold; }
     </style>
 </head>
 <body class="min-h-full py-8 sm:py-12 px-4">
@@ -80,17 +87,12 @@
             </div>
 
             <div class="flex flex-col items-center justify-center space-y-8 order-1 lg:order-2 lg:col-span-2">
-                <div class="fusion-core-wrapper delay-1 mt-4" style="animation: boot-sequence-fade-in 1s ease-out;">
-                    <div id="fusion-core-glow"></div>
-                    <div id="fusion-core"></div>
-                </div>
-                <div class="data-panel p-8 w-full text-center delay-2">
-                    <div class="flex justify-between items-center"><h2 class="font-orbitron text-2xl text-gray-300">Market Vector</h2><svg id="price-sparkline" width="80" height="30" class="opacity-50"></svg></div>
-                    <p class="font-orbitron text-6xl sm:text-7xl font-black text-orange-400" id="price-usd">...</p>
-                </div>
+                <div class="fusion-core-wrapper delay-1 mt-4" style="animation: boot-sequence-fade-in 1s ease-out;"><div id="fusion-core-glow"></div><div id="fusion-core"></div></div>
+                <div class="data-panel p-8 w-full text-center delay-2"><div class="flex justify-between items-center"><h2 class="font-orbitron text-2xl text-gray-300">Market Vector</h2><svg id="price-sparkline" width="80" height="30" class="opacity-50"></svg></div><p class="font-orbitron text-6xl sm:text-7xl font-black text-orange-400" id="price-usd">...</p></div>
                 <div id="oracle-panel" class="data-panel p-6 w-full text-center delay-3">
-                    <h2 class="font-orbitron text-xl text-orange-400/80 mb-2">ALPHA BRIEFING</h2>
+                    <h2 class="font-orbitron text-xl text-orange-400/80 mb-4">ALPHA BRIEFING</h2>
                     <p class="text-xl text-white font-medium min-h-[56px] flex items-center justify-center" id="oracle-insight">Awaiting analysis...</p>
+                    <div id="insight-selector" class="flex justify-center space-x-2 mt-4 border-t border-orange-500/10 pt-4"></div>
                 </div>
             </div>
 
@@ -99,11 +101,11 @@
                     <h2 class="font-orbitron text-xl text-center mb-4 border-b border-orange-500/20 pb-2">Trend Vector</h2>
                     <div class="flex justify-between items-center">
                         <div class="text-left">
-                            <p class="text-gray-400">Momentum Score</p>
                             <div class="tooltip-container">
-                                <p class="font-bold text-white text-3xl font-orbitron" id="singularity-score">... <span class="text-lg text-gray-400">(?)</span></p>
+                                <p class="text-gray-400">Momentum <span class="text-xs">(?)</span></p>
                                 <span class="tooltip-text">A 0-100 score blending momentum, trend, and on-chain health. &gt;70 is Bullish, &lt;30 is Bearish.</span>
                             </div>
+                            <p id="singularity-score" class="font-bold text-white text-3xl font-orbitron">...</p>
                         </div>
                         <div class="flex items-center space-x-2">
                             <div class="text-right">
@@ -133,6 +135,7 @@
             diffChange: document.getElementById('difficulty-change'),
             retargetBlocks: document.getElementById('next-retarget-blocks'),
             insight: document.getElementById('oracle-insight'),
+            insightSelector: document.getElementById('insight-selector'),
             timestamp: document.getElementById('timestamp'),
             openInterest: document.getElementById('open-interest'),
             fundingRate: document.getElementById('funding-rate'),
@@ -148,6 +151,29 @@
         };
         let lastData = {};
 
+        function setupInsightButtons(narrativeData) {
+            elements.insightSelector.innerHTML = "";
+            const insightKeys = {
+                primary: "Briefing",
+                market: "Market",
+                network: "Network"
+            };
+            Object.keys(insightKeys).forEach(key => {
+                if (narrativeData && narrativeData[key]) {
+                    const button = document.createElement("button");
+                    button.textContent = insightKeys[key];
+                    button.className = "insight-button";
+                    button.dataset.key = key;
+                    elements.insightSelector.appendChild(button);
+                    button.addEventListener("click", e => {
+                        updateElement(elements.insight, narrativeData[key]);
+                        document.querySelectorAll(".insight-button").forEach(b => b.classList.remove("active"));
+                        e.target.classList.add("active");
+                    });
+                }
+            });
+        }
+
         async function fetchData() {
             try {
                 const response = await fetch(`data.json?v=${new Date().getTime()}`);
@@ -162,10 +188,9 @@
 
         function generateSparkline(svg, data) {
             if (!svg || !data || data.length < 2) return;
-            const width = svg.clientWidth;
-            const height = svg.clientHeight;
-            const max = Math.max(...data);
-            const min = Math.min(...data);
+            const width = svg.clientWidth, height = svg.clientHeight;
+            if (width === 0 || height === 0) return;
+            const max = Math.max(...data), min = Math.min(...data);
             const range = max - min || 1;
             const points = data.map((d, i) => `${i / (data.length - 1) * width},${height - ((d - min) / range * height)}`).join(" L ");
             svg.innerHTML = `<path d="M ${points}" class="sparkline" />`;
@@ -186,8 +211,7 @@
 
         function updateDisplay(data) {
             if (!data) return;
-            
-            // Update core vectors
+
             updateElement(elements.price, `$${parseFloat(data.market_vector.price_usd).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`, lastData.market_vector?.price_usd);
             const diffChange = parseFloat(data.mining_vector.difficulty_change_percent);
             updateElement(elements.diffChange, `${diffChange.toFixed(2)}%`, lastData.mining_vector?.difficulty_change_percent, diffChange > 0 ? "text-green-400" : "text-red-400");
@@ -196,7 +220,6 @@
             updateElement(elements.reward, `${data.monetary_vector.current_block_reward} BTC`, lastData.monetary_vector?.current_block_reward);
             updateElement(elements.halvingBlocks, `${parseInt(data.monetary_vector.blocks_until_next_halving).toLocaleString('en-US')} Blocks`, lastData.monetary_vector?.blocks_until_next_halving);
 
-            // Update anti-fragile vectors
             elements.speculativePanel.style.display = (data.speculative_vector && !data.speculative_vector.error) ? 'block' : 'none';
             if (data.speculative_vector && !data.speculative_vector.error) {
                 updateElement(elements.openInterest, `$${(data.speculative_vector.open_interest / 1e9).toFixed(2)}B`, lastData.speculative_vector?.open_interest);
@@ -215,25 +238,28 @@
                 }
             }
 
-            // Update Singularity Score (relocated to Trend Panel)
             if (data.singularity_score) {
                 updateElement(elements.singularityScore, data.singularity_score);
             }
 
-            // Update the Living Core
             if (data.mining_vector.difficulty_change_percent) {
                 const change = data.mining_vector.difficulty_change_percent;
-                const duration = Math.max(1, 4 / (1 + Math.abs(change) / 2));
-                const hue = Math.max(-40, Math.min(40, change * 10));
+                const duration = Math.max(1.5, 4 / (1 + Math.abs(change) / 2));
+                const hue = Math.max(-20, Math.min(40, change * 15));
                 elements.fusionCore.style.setProperty('--core-pulse-duration', `${duration}s`);
                 elements.fusionCore.style.setProperty('--core-hue-shift', `${hue}deg`);
                 elements.fusionCoreGlow.style.setProperty('--core-pulse-duration', `${duration}s`);
                 elements.fusionCoreGlow.style.setProperty('--core-hue-shift', `${hue}deg`);
             }
-
-            // Update AI Insight
+            
             if (data.narrative_vector) {
-                updateElement(elements.insight, data.narrative_vector.primary, lastData.narrative_vector?.primary);
+                if (!lastData.narrative_vector || JSON.stringify(data.narrative_vector) !== JSON.stringify(lastData.narrative_vector)) {
+                    setupInsightButtons(data.narrative_vector);
+                }
+                updateElement(elements.insight, data.narrative_vector.primary);
+                document.querySelectorAll(".insight-button").forEach(b => b.classList.remove("active"));
+                const activeButton = elements.insightSelector.querySelector('[data-key="primary"]');
+                if (activeButton) activeButton.classList.add('active');
             }
             
             elements.timestamp.textContent = `Data Core Forged: ${new Date(data.timestamp_utc).toLocaleString()}`;
