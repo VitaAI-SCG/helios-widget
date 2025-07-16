@@ -1,17 +1,17 @@
 {
-    "timestamp_utc": "2025-07-16T01:23:20.353633+00:00",
+    "timestamp_utc": "2025-07-16T01:41:45.984947+00:00",
     "market_vector": {
-        "price_usd": 117825.2
+        "price_usd": 117710.0
     },
     "mining_vector": {
-        "difficulty_change_percent": 1.964663040057557,
-        "next_retarget_blocks": 1450,
+        "difficulty_change_percent": 1.8070147661993552,
+        "next_retarget_blocks": 1449,
         "estimated_retarget_date": "2025-07-25"
     },
     "monetary_vector": {
-        "circulating_supply": 19892968.75,
+        "circulating_supply": 19892971.875,
         "current_block_reward": 3.125,
-        "blocks_until_next_halving": 144250,
+        "blocks_until_next_halving": 144249,
         "next_halving_estimated_date": "2028-04-12"
     },
     "speculative_vector": {
@@ -20,7 +20,7 @@
         "error": true
     },
     "trend_vector": {
-        "rsi_14d": 68.07024356509709
+        "rsi_14d": 67.80959933067972
     },
     "narrative_vector": {
         "insight": "The network is in a state of equilibrium, awaiting a new catalyst."
