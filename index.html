@@ -4,13 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Helios :: Bitcoin Network Core</title>
-    
     <script src="https://cdn.tailwindcss.com"></script>
-    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
-
     <style>
         :root {
             --glow-color: #ffae00; --core-color-1: rgba(255, 174, 0, 0.9); --core-color-2: rgba(255, 107, 34, 0.7);
@@ -19,28 +16,28 @@
             --rsi-hot: #ff4500; --rsi-neutral: #cccccc; --rsi-cool: #00bfff;
             --core-pulse-duration: 4s; --core-hue-shift: 0deg;
         }
-        body { font-family: 'Inter', sans-serif; background-color: var(--bg-color); color: #f0f0f0; overflow: hidden; }
+        /* UPDATED: Removed overflow:hidden from body to allow scrolling */
+        body { 
+            font-family: 'Inter', sans-serif; background-color: var(--bg-color); color: #f0f0f0; 
+            background-image: radial-gradient(ellipse at top left, rgba(255,174,0,0.1) 0%, transparent 50%),
+                              radial-gradient(ellipse at bottom right, rgba(100,100,255,0.1) 0%, transparent 50%);
+            animation: background-pan 30s infinite alternate;
+        }
+        @keyframes background-pan { from { background-position: 0% 0%; } to { background-position: 100% 100%; } }
         .font-orbitron { font-family: 'Orbitron', sans-serif; }
         
-        #perspective-wrapper { perspective: 1500px; }
+        #perspective-wrapper { perspective: 1500px; width: 100%; }
         #helios-widget { transition: transform 0.1s linear; transform-style: preserve-3d; }
-        .background-grid { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: linear-gradient(rgba(255,174,0,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,174,0,0.1) 1px, transparent 1px); background-size: 50px 50px; transform: translateZ(-200px) rotateX(75deg); transition: transform 0.1s linear; }
+        .background-grid { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: linear-gradient(rgba(255,174,0,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,174,0,0.1) 1px, transparent 1px); background-size: 50px 50px; transform: translateZ(-200px) rotateX(75deg); transition: transform 0.1s linear; z-index: -1; }
 
         .fusion-core-wrapper { position: relative; display: flex; align-items: center; justify-content: center; transform: translateZ(-50px); }
         #fusion-core-glow { width: 250px; height: 250px; background: radial-gradient(circle, var(--core-color-2), transparent 70%); border-radius: 50%; position: absolute; animation: pulse-glow var(--core-pulse-duration) infinite ease-in-out; filter: blur(20px) hue-rotate(var(--core-hue-shift)); transition: filter 1s ease-out; }
         #fusion-core { width: 170px; height: 170px; background: radial-gradient(circle, var(--core-color-1), var(--core-color-2)); border-radius: 50%; position: relative; box-shadow: 0 0 15px var(--core-color-1), 0 0 30px var(--core-color-1), 0 0 50px var(--core-color-2), inset 0 0 20px rgba(255, 255, 255, 0.6); animation: pulse-core var(--core-pulse-duration) infinite ease-in-out; transition: filter 1s ease-out; filter: hue-rotate(var(--core-hue-shift)); }
         
-        .data-panel {
-            background-color: var(--panel-bg-color); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-            border: 1px solid var(--border-color); border-radius: 1rem;
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3), 0 0 20px rgba(255,174,0,0.1) inset;
-            transition: all 0.3s ease-in-out; animation: boot-sequence-fade-in 1s ease-out forwards; opacity: 0;
-            transform-style: preserve-3d;
-        }
+        .data-panel { background-color: var(--panel-bg-color); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid var(--border-color); border-radius: 1rem; box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3), 0 0 20px rgba(255,174,0,0.1) inset; transition: all 0.3s ease-in-out; animation: boot-sequence-fade-in 1s ease-out forwards; opacity: 0; transform-style: preserve-3d; }
         .data-panel h2 { display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
         .panel-icon { width: 1em; height: 1em; opacity: 0.7; }
 
-        /* Angled Side Panels for 3D effect */
         .left-wing { transform: rotateY(5deg) translateZ(20px); }
         .right-wing { transform: rotateY(-5deg) translateZ(20px); }
         
@@ -49,7 +46,6 @@
         @keyframes boot-sequence-fade-in { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         .delay-1 { animation-delay: 0.2s; } .delay-2 { animation-delay: 0.4s; } .delay-3 { animation-delay: 0.6s; }
         
-        /* Holographic Glitch Effect */
         .flash { animation: glitch 0.4s ease-out; }
         @keyframes glitch { 0%, 100% { transform: none; opacity: 1; } 25% { transform: skew(-0.5deg, -0.2deg); opacity: 0.75; text-shadow: 1px 1px 0 #ff00ff, -1px -1px 0 #00ffff; } 50% { transform: skew(0.3deg, 0.1deg); opacity: 0.75; } 75% { transform: skew(-0.2deg, 0.4deg); text-shadow: -1px -1px 0 #ff00ff, 1px 1px 0 #00ffff; } }
         
@@ -65,7 +61,7 @@
         .tooltip-container:hover .tooltip-text { visibility: visible; opacity: 1; }
     </style>
 </head>
-<body class="min-h-full py-8 sm:py-12 px-4 flex items-center justify-center">
+<body class="min-h-full py-8 sm:py-12 px-4 lg:flex lg:items-center lg:justify-center">
 
 <div id="perspective-wrapper">
     <div class="background-grid"></div>
@@ -100,130 +96,18 @@
     <div id="fuel-modal" class="modal"><div class="modal-content text-center"><a href="#" class="modal-close" title="Close">×</a><h2 class="font-orbitron text-2xl text-orange-400 mb-4">Fuel the Core</h2><p class="mb-4">Scan the QR code or copy the address to support the mission.</p><img src="qr_code.png" alt="Bitcoin Deposit QR Code" class="w-48 h-48 mx-auto my-4 p-2 bg-white rounded-lg"><a href="bitcoin:bc1qn4h68x5327fmr4fvlv94t6vw0v8ck9z33m9jw8" class="block break-words text-sm text-gray-400 hover:text-white transition-colors">bc1qn4h68x5327fmr4fvlv94t6vw0v8ck9z33m9jw8</a><p class="text-xs text-gray-500 mt-4">Only send BTC to this address on the Bitcoin Network.</p></div></div>
 
     <script>
-        const elements = {
-            price: document.getElementById('price-usd'),
-            supply: document.getElementById('circulating-supply'),
-            reward: document.getElementById('block-reward'),
-            halvingBlocks: document.getElementById('next-halving-blocks'),
-            diffChange: document.getElementById('difficulty-change'),
-            retargetBlocks: document.getElementById('next-retarget-blocks'),
-            insight: document.getElementById('oracle-insight'),
-            timestamp: document.getElementById('timestamp'),
-            openInterest: document.getElementById('open-interest'),
-            fundingRate: document.getElementById('funding-rate'),
-            speculativePanel: document.getElementById('speculative-panel'),
-            trendPanel: document.getElementById('trend-panel'),
-            rsiValue: document.getElementById('rsi-value'),
-            rsiLevel: document.getElementById('rsi-level'),
-            singularityScore: document.getElementById('singularity-score'),
-            fusionCore: document.getElementById('fusion-core'),
-            fusionCoreGlow: document.getElementById('fusion-core-glow'),
-            priceSparkline: document.getElementById('price-sparkline'),
-            rsiSparkline: document.getElementById('rsi-sparkline'),
-            perspectiveWrapper: document.getElementById('perspective-wrapper'),
-            heliosWidget: document.getElementById('helios-widget'),
-            backgroundGrid: document.querySelector('.background-grid')
-        };
-        let lastData = {};
-
-        // Parallax Mouse Interaction
-        elements.perspectiveWrapper.addEventListener("mousemove", e => {
-            const { clientWidth: width, clientHeight: height } = elements.perspectiveWrapper;
-            const x = e.clientX - width / 2;
-            const y = e.clientY - height / 2;
-            const rotateY = 15 * x / (width / 2);
-            const rotateX = -15 * y / (height / 2);
-            
-            elements.heliosWidget.style.transform = `rotateY(${rotateY}deg) rotateX(${rotateX}deg)`;
-            elements.backgroundGrid.style.transform = `translateZ(-200px) rotateX(75deg) rotateY(${-rotateY/2}deg) rotateX(${-rotateX/2}deg)`;
-        });
-
-        async function fetchData() {
-            try {
-                const response = await fetch(`data.json?v=${new Date().getTime()}`);
-                if (!response.ok) throw new Error(`Network response not ok: ${response.statusText}`);
-                const data = await response.json();
-                updateDisplay(data);
-            } catch (error) {
-                console.error("Failed to fetch Helios data:", error);
-                elements.timestamp.textContent = "Error: Could not load data core.";
-            }
-        }
-
-        function generateSparkline(svg, data) {
-            if (!svg || !data || data.length < 2) return;
-            const width = svg.clientWidth, height = svg.clientHeight;
-            if (width === 0 || height === 0) return;
-            const max = Math.max(...data), min = Math.min(...data);
-            const range = max - min || 1;
-            const points = data.map((d, i) => `${i / (data.length - 1) * width},${height - ((d - min) / range * height)}`).join(" L ");
-            svg.innerHTML = `<path d="M ${points}" class="sparkline" />`;
-        }
-
-        function updateElement(el, newValue, oldValue, colorClass) {
-            if (!el || el.textContent === newValue) return;
-            el.textContent = newValue;
-            el.classList.add('flash');
-            el.classList.remove('text-green-400', 'text-red-400', 'text-white');
-            if (colorClass) {
-                el.classList.add(colorClass);
-            } else {
-                el.classList.add('text-white');
-            }
-            setTimeout(() => el.classList.remove('flash'), 400);
-        }
-
-        function updateDisplay(data) {
-            if (!data) return;
-            
-            updateElement(elements.price, `$${parseFloat(data.market_vector.price_usd).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`, lastData.market_vector?.price_usd);
-            const diffChange = parseFloat(data.mining_vector.difficulty_change_percent);
-            updateElement(elements.diffChange, `${diffChange.toFixed(2)}%`, lastData.mining_vector?.difficulty_change_percent, diffChange > 0 ? "text-green-400" : "text-red-400");
-            updateElement(elements.retargetBlocks, `${parseInt(data.mining_vector.next_retarget_blocks).toLocaleString('en-US')} Blocks`, lastData.mining_vector?.next_retarget_blocks);
-            updateElement(elements.supply, parseInt(data.monetary_vector.circulating_supply).toLocaleString('en-US'), lastData.monetary_vector?.circulating_supply);
-            updateElement(elements.reward, `${data.monetary_vector.current_block_reward} BTC`, lastData.monetary_vector?.current_block_reward);
-            updateElement(elements.halvingBlocks, `${parseInt(data.monetary_vector.blocks_until_next_halving).toLocaleString('en-US')} Blocks`, lastData.monetary_vector?.blocks_until_next_halving);
-
-            elements.speculativePanel.style.display = (data.speculative_vector && !data.speculative_vector.error) ? 'block' : 'none';
-            if (data.speculative_vector && !data.speculative_vector.error) {
-                updateElement(elements.openInterest, `$${(data.speculative_vector.open_interest / 1e9).toFixed(2)}B`, lastData.speculative_vector?.open_interest);
-                updateElement(elements.fundingRate, `${(data.speculative_vector.funding_rate * 100).toFixed(4)}%`, lastData.speculative_vector?.funding_rate);
-            }
-            
-            elements.trendPanel.style.display = (data.trend_vector && data.trend_vector.rsi_14d) ? 'block' : 'none';
-            if (data.trend_vector && data.trend_vector.rsi_14d) {
-                const rsi = parseFloat(data.trend_vector.rsi_14d);
-                updateElement(elements.rsiValue, rsi.toFixed(1));
-                elements.rsiLevel.style.height = `${100 - rsi}%`;
-                if (data.trend_vector.historical_prices) {
-                    generateSparkline(elements.priceSparkline, data.trend_vector.historical_prices);
-                    const rsiHistory = data.trend_vector.historical_prices.map((p, i, arr) => i < 14 ? 50 : rsi - ((arr.length - 1 - i) * 0.5));
-                    generateSparkline(elements.rsiSparkline, rsiHistory);
-                }
-            }
-
-            if (data.singularity_score) {
-                updateElement(elements.singularityScore, data.singularity_score);
-            }
-
-            if (data.mining_vector.difficulty_change_percent) {
-                const change = data.mining_vector.difficulty_change_percent;
-                const duration = Math.max(1.5, 4 / (1 + Math.abs(change) / 2));
-                const hue = Math.max(-20, Math.min(40, change * 15));
-                document.documentElement.style.setProperty('--core-pulse-duration', `${duration}s`);
-                document.documentElement.style.setProperty('--core-hue-shift', `${hue}deg`);
-            }
-            
-            if (data.narrative_vector) {
-                updateElement(elements.insight, data.narrative_vector.primary, lastData.narrative_vector?.primary);
-            }
-            
-            elements.timestamp.textContent = `Data Core Forged: ${new Date(data.timestamp_utc).toLocaleString()}`;
-            lastData = data;
-        }
-
-        fetchData();
-        setInterval(fetchData, 60000);
+        const elements={price:document.getElementById("price-usd"),supply:document.getElementById("circulating-supply"),reward:document.getElementById("block-reward"),halvingBlocks:document.getElementById("next-halving-blocks"),diffChange:document.getElementById("difficulty-change"),retargetBlocks:document.getElementById("next-retarget-blocks"),insight:document.getElementById("oracle-insight"),timestamp:document.getElementById("timestamp"),openInterest:document.getElementById("open-interest"),fundingRate:document.getElementById("funding-rate"),speculativePanel:document.getElementById("speculative-panel"),trendPanel:document.getElementById("trend-panel"),rsiValue:document.getElementById("rsi-value"),rsiLevel:document.getElementById("rsi-level"),singularityScore:document.getElementById("singularity-score"),fusionCore:document.getElementById("fusion-core"),fusionCoreGlow:document.getElementById("fusion-core-glow"),priceSparkline:document.getElementById("price-sparkline"),rsiSparkline:document.getElementById("rsi-sparkline"),perspectiveWrapper:document.getElementById("perspective-wrapper"),heliosWidget:document.getElementById("helios-widget"),backgroundGrid:document.querySelector(".background-grid")};let lastData={};
+        elements.perspectiveWrapper.addEventListener("mousemove",e=>{const{clientWidth:t,clientHeight:o}=elements.perspectiveWrapper,a=e.clientX-t/2,n=e.clientY-o/2,s=15,c=s*a/(t/2),i=s*n/(o/2)*-1;elements.heliosWidget.style.transform=`rotateY(${c}deg) rotateX(${i}deg)`;elements.backgroundGrid.style.transform=`translateZ(-200px) rotateX(75deg) rotateY(${-c/2}deg) rotateX(${-i/2}deg)`});
+        async function fetchData(){try{const e=await fetch(`data.json?v=${(new Date).getTime()}`);if(!e.ok)throw new Error(`Network response not ok: ${e.statusText}`);const t=await e.json();updateDisplay(t)}catch(e){console.error("Failed to fetch Helios data:",e),elements.timestamp.textContent="Error: Could not load data core."}}
+        function generateSparkline(svg,data){if(!svg||!data||data.length<2)return;const width=svg.clientWidth,height=svg.clientHeight;if(width===0||height===0)return;const max=Math.max(...data),min=Math.min(...data),range=max-min||1;const points=data.map((d,i)=>`${i/(data.length-1)*width},${height-((d-min)/range*height)}`).join(" L ");svg.innerHTML=`<path d="M ${points}" class="sparkline" />`}
+        function updateElement(e,t,o,a){if(!e||e.textContent===t)return;e.textContent=t,e.classList.add("flash"),e.classList.remove("text-green-400","text-red-400","text-white"),a?e.classList.add(a):e.classList.add("text-white"),setTimeout(()=>e.classList.remove("flash"),400)}
+        function updateDisplay(data){if(!data)return;updateElement(elements.price,`$${parseFloat(data.market_vector.price_usd).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2})}`,lastData.market_vector?.price_usd);const diffChange=parseFloat(data.mining_vector.difficulty_change_percent);updateElement(elements.diffChange,`${diffChange.toFixed(2)}%`,lastData.mining_vector?.difficulty_change_percent,diffChange>0?"text-green-400":"text-red-400");updateElement(elements.retargetBlocks,`${parseInt(data.mining_vector.next_retarget_blocks).toLocaleString("en-US")} Blocks`,lastData.mining_vector?.next_retarget_blocks);updateElement(elements.supply,parseInt(data.monetary_vector.circulating_supply).toLocaleString("en-US"),lastData.monetary_vector?.circulating_supply);updateElement(elements.reward,`${data.monetary_vector.current_block_reward} BTC`,lastData.monetary_vector?.current_block_reward);updateElement(elements.halvingBlocks,`${parseInt(data.monetary_vector.blocks_until_next_halving).toLocaleString("en-US")} Blocks`,lastData.monetary_vector?.blocks_until_next_halving);
+        elements.speculativePanel.style.display=data.speculative_vector&&!data.speculative_vector.error?"block":"none";if(data.speculative_vector&&!data.speculative_vector.error){updateElement(elements.openInterest,`$${(data.speculative_vector.open_interest/1e9).toFixed(2)}B`,lastData.speculative_vector?.open_interest),updateElement(elements.fundingRate,`${(100*data.speculative_vector.funding_rate).toFixed(4)}%`,lastData.speculative_vector?.funding_rate)}
+        elements.trendPanel.style.display=data.trend_vector&&data.trend_vector.rsi_14d?"block":"none";if(data.trend_vector&&data.trend_vector.rsi_14d){const rsi=parseFloat(data.trend_vector.rsi_14d);updateElement(elements.rsiValue,rsi.toFixed(1));elements.rsiLevel.style.height=`${100-rsi}%`;if(data.trend_vector.historical_prices){generateSparkline(elements.priceSparkline,data.trend_vector.historical_prices);const rsiHistory=data.trend_vector.historical_prices.map((p,i,arr)=>i<14?50:rsi-((arr.length-1-i)*.5));generateSparkline(elements.rsiSparkline,rsiHistory)}}
+        if(data.singularity_score)updateElement(elements.singularityScore,data.singularity_score);
+        if(data.mining_vector.difficulty_change_percent){const change=data.mining_vector.difficulty_change_percent;const duration=Math.max(1.5,4/(1+Math.abs(change)/2));const hue=Math.max(-20,Math.min(40,change*15));document.documentElement.style.setProperty("--core-pulse-duration",`${duration}s`);document.documentElement.style.setProperty("--core-hue-shift",`${hue}deg`)}
+        data.narrative_vector&&updateElement(elements.insight,data.narrative_vector.primary,lastData.narrative_vector?.primary),elements.timestamp.textContent=`Data Core Forged: ${new Date(data.timestamp_utc).toLocaleString()}`,lastData=data}
+        fetchData(),setInterval(fetchData,60000);
     </script>
 </body>
 </html>
