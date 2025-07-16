@@ -14,48 +14,45 @@
     <style>
         :root {
             --glow-color: #ffae00; --core-color-1: rgba(255, 174, 0, 0.9); --core-color-2: rgba(255, 107, 34, 0.7);
-            --bg-color: #05020a; --panel-bg-color: rgba(22, 18, 32, 0.5); --border-color: rgba(255, 174, 0, 0.2);
-            --border-hover-color: rgba(255, 174, 0, 0.6); --insight-border-color: rgba(255, 174, 0, 0.5);
-            /* RSI Gauge Colors */
+            --bg-color: #020104; --panel-bg-color: rgba(22, 18, 32, 0.6); --border-color: rgba(255, 174, 0, 0.2);
+            --border-hover-color: rgba(255, 174, 0, 0.7); --insight-border-color: rgba(255, 174, 0, 0.5);
             --rsi-hot: #ff4500; --rsi-neutral: #cccccc; --rsi-cool: #00bfff;
-            /* -- Dynamic CSS variables for the Living Core -- */
-            --core-pulse-duration: 4s;
-            --core-hue-shift: 0deg;
+            --core-pulse-duration: 4s; --core-hue-shift: 0deg;
         }
-        body {
-            font-family: 'Inter', sans-serif; background-color: var(--bg-color); color: #f0f0f0;
-            background-image: radial-gradient(ellipse at top left, rgba(255,174,0,0.1) 0%, transparent 50%),
-                              radial-gradient(ellipse at bottom right, rgba(100,100,255,0.1) 0%, transparent 50%);
-            animation: background-pan 30s infinite alternate;
-        }
-        @keyframes background-pan { from { background-position: 0% 0%; } to { background-position: 100% 100%; } }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg-color); color: #f0f0f0; overflow: hidden; }
         .font-orbitron { font-family: 'Orbitron', sans-serif; }
-        .fusion-core-wrapper { position: relative; display: flex; align-items: center; justify-content: center; }
-        #fusion-core-glow {
-            width: 250px; height: 250px; background: radial-gradient(circle, var(--core-color-2), transparent 70%);
-            border-radius: 50%; position: absolute; animation: pulse-glow var(--core-pulse-duration) infinite ease-in-out; 
-            filter: blur(20px) hue-rotate(var(--core-hue-shift)); transition: filter 1s ease-out;
-        }
-        #fusion-core {
-            width: 170px; height: 170px; background: radial-gradient(circle, var(--core-color-1), var(--core-color-2));
-            border-radius: 50%; position: relative;
-            box-shadow: 0 0 15px var(--core-color-1), 0 0 30px var(--core-color-1), 0 0 50px var(--core-color-2), inset 0 0 20px rgba(255, 255, 255, 0.6);
-            animation: pulse-core var(--core-pulse-duration) infinite ease-in-out;
-            transition: filter 1s ease-out; filter: hue-rotate(var(--core-hue-shift));
-        }
+        
+        #perspective-wrapper { perspective: 1500px; }
+        #helios-widget { transition: transform 0.1s linear; transform-style: preserve-3d; }
+        .background-grid { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: linear-gradient(rgba(255,174,0,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,174,0,0.1) 1px, transparent 1px); background-size: 50px 50px; transform: translateZ(-200px) rotateX(75deg); transition: transform 0.1s linear; }
+
+        .fusion-core-wrapper { position: relative; display: flex; align-items: center; justify-content: center; transform: translateZ(-50px); }
+        #fusion-core-glow { width: 250px; height: 250px; background: radial-gradient(circle, var(--core-color-2), transparent 70%); border-radius: 50%; position: absolute; animation: pulse-glow var(--core-pulse-duration) infinite ease-in-out; filter: blur(20px) hue-rotate(var(--core-hue-shift)); transition: filter 1s ease-out; }
+        #fusion-core { width: 170px; height: 170px; background: radial-gradient(circle, var(--core-color-1), var(--core-color-2)); border-radius: 50%; position: relative; box-shadow: 0 0 15px var(--core-color-1), 0 0 30px var(--core-color-1), 0 0 50px var(--core-color-2), inset 0 0 20px rgba(255, 255, 255, 0.6); animation: pulse-core var(--core-pulse-duration) infinite ease-in-out; transition: filter 1s ease-out; filter: hue-rotate(var(--core-hue-shift)); }
+        
         .data-panel {
             background-color: var(--panel-bg-color); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
             border: 1px solid var(--border-color); border-radius: 1rem;
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2), 0 0 20px rgba(255,174,0,0.1) inset;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3), 0 0 20px rgba(255,174,0,0.1) inset;
             transition: all 0.3s ease-in-out; animation: boot-sequence-fade-in 1s ease-out forwards; opacity: 0;
+            transform-style: preserve-3d;
         }
-        #oracle-panel { border-color: var(--insight-border-color); box-shadow: 0 0 30px rgba(255,174,0,0.2); }
+        .data-panel h2 { display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
+        .panel-icon { width: 1em; height: 1em; opacity: 0.7; }
+
+        /* Angled Side Panels for 3D effect */
+        .left-wing { transform: rotateY(5deg) translateZ(20px); }
+        .right-wing { transform: rotateY(-5deg) translateZ(20px); }
+        
         @keyframes pulse-core { 50% { transform: scale(1.05); } }
         @keyframes pulse-glow { 50% { transform: scale(1.15); opacity: 0.8; } }
         @keyframes boot-sequence-fade-in { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         .delay-1 { animation-delay: 0.2s; } .delay-2 { animation-delay: 0.4s; } .delay-3 { animation-delay: 0.6s; }
-        .flash { animation: power-surge 0.7s ease-out; }
-        @keyframes power-surge { 0% { color: var(--glow-color); text-shadow: 0 0 8px var(--glow-color); } 100% { color: inherit; text-shadow: none; } }
+        
+        /* Holographic Glitch Effect */
+        .flash { animation: glitch 0.4s ease-out; }
+        @keyframes glitch { 0%, 100% { transform: none; opacity: 1; } 25% { transform: skew(-0.5deg, -0.2deg); opacity: 0.75; text-shadow: 1px 1px 0 #ff00ff, -1px -1px 0 #00ffff; } 50% { transform: skew(0.3deg, 0.1deg); opacity: 0.75; } 75% { transform: skew(-0.2deg, 0.4deg); text-shadow: -1px -1px 0 #ff00ff, 1px 1px 0 #00ffff; } }
+        
         .modal { visibility: hidden; opacity: 0; position: fixed; top: 0; right: 0; bottom: 0; left: 0; display: flex; align-items: center; justify-content: center; background: rgba(10, 5, 15, 0.8); backdrop-filter: blur(8px); transition: all 0.4s; z-index: 50; }
         .modal:target { visibility: visible; opacity: 1; }
         .modal-content { background: var(--bg-color); border-radius: 1rem; padding: 2rem; border: 1px solid var(--border-color); width: 90%; max-width: 400px; }
@@ -66,13 +63,12 @@
         .tooltip-container { position: relative; display: inline-block; cursor: help; }
         .tooltip-text { visibility: hidden; width: 220px; background-color: #111; color: #fff; text-align: center; border-radius: 6px; padding: 8px; position: absolute; z-index: 1; bottom: 125%; left: 50%; margin-left: -110px; opacity: 0; transition: opacity 0.3s; font-size: 0.8rem; }
         .tooltip-container:hover .tooltip-text { visibility: visible; opacity: 1; }
-        .insight-button { background-color: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; transition: all 0.2s ease; cursor: pointer; }
-        .insight-button:hover { background-color: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2); }
-        .insight-button.active { background-color: var(--glow-color); color: #000; border-color: var(--glow-color); font-weight: bold; }
     </style>
 </head>
-<body class="min-h-full py-8 sm:py-12 px-4">
+<body class="min-h-full py-8 sm:py-12 px-4 flex items-center justify-center">
 
+<div id="perspective-wrapper">
+    <div class="background-grid"></div>
     <div id="helios-widget" class="w-full max-w-7xl mx-auto">
         <header class="text-center mb-8" style="animation: boot-sequence-fade-in 1s ease-out;">
             <h1 class="font-orbitron text-4xl md:text-5xl font-black tracking-widest text-white">HELIOS</h1>
@@ -81,43 +77,20 @@
         
         <div class="grid grid-cols-1 lg:grid-cols-4 gap-8 items-start">
             
-            <div class="space-y-8 order-2 lg:order-1 lg:col-span-1">
-                <div class="data-panel p-6 delay-2"><h2 class="font-orbitron text-xl text-center mb-4 border-b border-orange-500/20 pb-2">Monetary Vector</h2><div class="space-y-4 text-md"><div class="flex justify-between items-baseline"><span class="text-gray-400">Supply:</span><span id="circulating-supply" class="font-bold text-white text-lg">...</span></div><div class="flex justify-between items-baseline"><span class="text-gray-400">Reward:</span><span id="block-reward" class="font-bold text-white text-lg">...</span></div><div class="flex justify-between items-baseline"><span class="text-gray-400">Halving In:</span><span id="next-halving-blocks" class="font-bold text-white text-lg">...</span></div></div></div>
-                <div class="data-panel p-6 delay-3"><h2 class="font-orbitron text-xl text-center mb-4 border-b border-orange-500/20 pb-2">Mining Vector</h2><div class="space-y-4 text-md"><div class="flex justify-between items-baseline"><span class="text-gray-400">Difficulty Change:</span><span id="difficulty-change" class="font-bold text-white text-lg">...</span></div><div class="flex justify-between items-baseline"><span class="text-gray-400">Retarget In:</span><span id="next-retarget-blocks" class="font-bold text-white text-lg">...</span></div></div></div>
+            <div class="space-y-8 order-2 lg:order-1 lg:col-span-1 left-wing">
+                <div class="data-panel p-6 delay-2"><h2 class="font-orbitron text-xl text-center mb-4 border-b border-orange-500/20 pb-2"><svg xmlns="http://www.w3.org/2000/svg" class="panel-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12,1.75A10.25,10.25,0,1,0,22.25,12,10.26,10.26,0,0,0,12,1.75ZM15.65,16.59,12,14.54,8.35,16.59a1,1,0,0,1-1.45-1.05l1-4.13L4.25,8.82a1,1,0,0,1,.55-1.7h4.21l1.65-4a1,1,0,0,1,1.8,0l1.65,4H17.7a1,1,0,0,1,.55,1.7L14.6,11.41l1,4.13a1,1,0,0,1-1.45,1.05Z"/></svg>Monetary Vector</h2><div class="space-y-4 text-md"><div class="flex justify-between items-baseline"><span class="text-gray-400">Supply:</span><span id="circulating-supply" class="font-bold text-white text-lg">...</span></div><div class="flex justify-between items-baseline"><span class="text-gray-400">Reward:</span><span id="block-reward" class="font-bold text-white text-lg">...</span></div><div class="flex justify-between items-baseline"><span class="text-gray-400">Halving In:</span><span id="next-halving-blocks" class="font-bold text-white text-lg">...</span></div></div></div>
+                <div class="data-panel p-6 delay-3"><h2 class="font-orbitron text-xl text-center mb-4 border-b border-orange-500/20 pb-2"><svg xmlns="http://www.w3.org/2000/svg" class="panel-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M21.51,4.36,12,2,2.49,4.36a1,1,0,0,0-.49,1V15.11a1,1,0,0,0,.49,1l9.51,2.35,9.51-2.35a1,1,0,0,0,.49-1V5.36a1,1,0,0,0-.49-1ZM12,14.2,4,12.2V6.2L12,8.2Zm0-7L4,5.2,12,3.2,20,5.2Z"/><path d="M20,13.79l-8,2v5l8-2.35V13.79Z"/></svg>Mining Vector</h2><div class="space-y-4 text-md"><div class="flex justify-between items-baseline"><span class="text-gray-400">Difficulty Change:</span><span id="difficulty-change" class="font-bold text-white text-lg">...</span></div><div class="flex justify-between items-baseline"><span class="text-gray-400">Retarget In:</span><span id="next-retarget-blocks" class="font-bold text-white text-lg">...</span></div></div></div>
             </div>
 
             <div class="flex flex-col items-center justify-center space-y-8 order-1 lg:order-2 lg:col-span-2">
                 <div class="fusion-core-wrapper delay-1 mt-4" style="animation: boot-sequence-fade-in 1s ease-out;"><div id="fusion-core-glow"></div><div id="fusion-core"></div></div>
-                <div class="data-panel p-8 w-full text-center delay-2"><div class="flex justify-between items-center"><h2 class="font-orbitron text-2xl text-gray-300">Market Vector</h2><svg id="price-sparkline" width="80" height="30" class="opacity-50"></svg></div><p class="font-orbitron text-6xl sm:text-7xl font-black text-orange-400" id="price-usd">...</p></div>
-                <div id="oracle-panel" class="data-panel p-6 w-full text-center delay-3">
-                    <h2 class="font-orbitron text-xl text-orange-400/80 mb-4">ALPHA BRIEFING</h2>
-                    <p class="text-xl text-white font-medium min-h-[56px] flex items-center justify-center" id="oracle-insight">Awaiting analysis...</p>
-                    <div id="insight-selector" class="flex justify-center space-x-2 mt-4 border-t border-orange-500/10 pt-4"></div>
-                </div>
+                <div class="data-panel p-8 w-full text-center delay-2"><div class="flex justify-between items-center"><h2 class="font-orbitron text-2xl text-gray-300"><svg xmlns="http://www.w3.org/2000/svg" class="panel-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M20,8H4V6H20ZM20,18H4V12H20Zm-3-4H7V16h10Z"/></svg>Market Vector</h2><svg id="price-sparkline" width="80" height="30" class="opacity-50"></svg></div><p class="font-orbitron text-6xl sm:text-7xl font-black text-orange-400" id="price-usd">...</p></div>
+                <div id="oracle-panel" class="data-panel p-6 w-full text-center delay-3"><h2 class="font-orbitron text-xl text-orange-400/80 mb-2"><svg xmlns="http://www.w3.org/2000/svg" class="panel-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12,2A10,10,0,1,0,22,12,10,10,0,0,0,12,2Zm1,14.5H11v-6h2Zm0-8H11V6h2Z"/></svg>ALPHA BRIEFING</h2><p class="text-xl text-white font-medium min-h-[56px] flex items-center justify-center" id="oracle-insight">Awaiting analysis...</p></div>
             </div>
 
-            <div class="space-y-8 order-3 lg:order-3 lg:col-span-1">
-                <div id="trend-panel" class="data-panel p-6 delay-2">
-                    <h2 class="font-orbitron text-xl text-center mb-4 border-b border-orange-500/20 pb-2">Trend Vector</h2>
-                    <div class="flex justify-between items-center">
-                        <div class="text-left">
-                            <div class="tooltip-container">
-                                <p class="text-gray-400">Momentum <span class="text-xs">(?)</span></p>
-                                <span class="tooltip-text">A 0-100 score blending momentum, trend, and on-chain health. &gt;70 is Bullish, &lt;30 is Bearish.</span>
-                            </div>
-                            <p id="singularity-score" class="font-bold text-white text-3xl font-orbitron">...</p>
-                        </div>
-                        <div class="flex items-center space-x-2">
-                            <div class="text-right">
-                                <p class="text-gray-400">14D RSI</p>
-                                <p id="rsi-value" class="font-bold text-white text-lg font-orbitron">...</p>
-                            </div>
-                            <div class="rsi-gauge"><div id="rsi-level" class="rsi-level"></div></div>
-                        </div>
-                    </div>
-                    <svg id="rsi-sparkline" width="100%" height="30" class="mt-4 opacity-50"></svg>
-                </div>
-                <div id="speculative-panel" class="data-panel p-6 delay-3"><h2 class="font-orbitron text-xl text-center mb-4 border-b border-orange-500/20 pb-2">Speculative Vector</h2><div class="space-y-4 text-md"><div class="flex justify-between items-baseline"><span class="text-gray-400">Open Interest:</span><span id="open-interest" class="font-bold text-white text-lg">...</span></div><div class="flex justify-between items-baseline"><span class="text-gray-400">Funding Rate:</span><span id="funding-rate" class="font-bold text-white text-lg">...</span></div></div></div>
+            <div class="space-y-8 order-3 lg:order-3 lg:col-span-1 right-wing">
+                <div id="trend-panel" class="data-panel p-6 delay-2"><h2 class="font-orbitron text-xl text-center mb-4 border-b border-orange-500/20 pb-2"><svg xmlns="http://www.w3.org/2000/svg" class="panel-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M16,6H13.82L10.94,2.26A1,1,0,0,0,10.23,2a1,1,0,0,0-.71.26L6.18,6H4A2,2,0,0,0,2,8v9a2,2,0,0,0,2,2H20a2,2,0,0,0,2-2V8A2,2,0,0,0,20,6Zm-8,8a4,4,0,1,1,4-4A4,4,0,0,1,12,14Z"/></svg>Trend Vector</h2><div class="flex justify-between items-center"><div class="text-left"><div class="tooltip-container"><p class="text-gray-400">Momentum <span class="text-xs">(?)</span></p><span class="tooltip-text">A 0-100 score blending momentum, trend, and on-chain health. >70 is Bullish, <30 is Bearish.</span></div><p id="singularity-score" class="font-bold text-white text-3xl font-orbitron">...</p></div><div class="flex items-center space-x-2"><div class="text-right"><p class="text-gray-400">14D RSI</p><p id="rsi-value" class="font-bold text-white text-lg font-orbitron">...</p></div><div class="rsi-gauge"><div id="rsi-level" class="rsi-level"></div></div></div></div><svg id="rsi-sparkline" width="100%" height="30" class="mt-4 opacity-50"></svg></div>
+                <div id="speculative-panel" class="data-panel p-6 delay-3"><h2 class="font-orbitron text-xl text-center mb-4 border-b border-orange-500/20 pb-2"><svg xmlns="http://www.w3.org/2000/svg" class="panel-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M21.72,12.72,12,3,2.28,12.72,12,22.44ZM10.5,13a1.5,1.5,0,1,0,1.5,1.5A1.5,1.5,0,0,0,10.5,13Zm0-4.5a1.5,1.5,0,1,0,1.5,1.5A1.5,1.5,0,0,0,10.5,8.5Zm4.5,4.5a1.5,1.5,0,1,0,1.5,1.5A1.5,1.5,0,0,0,15,13Z"/></svg>Speculative Vector</h2><div class="space-y-4 text-md"><div class="flex justify-between items-baseline"><span class="text-gray-400">Open Interest:</span><span id="open-interest" class="font-bold text-white text-lg">...</span></div><div class="flex justify-between items-baseline"><span class="text-gray-400">Funding Rate:</span><span id="funding-rate" class="font-bold text-white text-lg">...</span></div></div></div>
             </div>
         </div>
         
@@ -135,7 +108,6 @@
             diffChange: document.getElementById('difficulty-change'),
             retargetBlocks: document.getElementById('next-retarget-blocks'),
             insight: document.getElementById('oracle-insight'),
-            insightSelector: document.getElementById('insight-selector'),
             timestamp: document.getElementById('timestamp'),
             openInterest: document.getElementById('open-interest'),
             fundingRate: document.getElementById('funding-rate'),
@@ -147,32 +119,24 @@
             fusionCore: document.getElementById('fusion-core'),
             fusionCoreGlow: document.getElementById('fusion-core-glow'),
             priceSparkline: document.getElementById('price-sparkline'),
-            rsiSparkline: document.getElementById('rsi-sparkline')
+            rsiSparkline: document.getElementById('rsi-sparkline'),
+            perspectiveWrapper: document.getElementById('perspective-wrapper'),
+            heliosWidget: document.getElementById('helios-widget'),
+            backgroundGrid: document.querySelector('.background-grid')
         };
         let lastData = {};
 
-        function setupInsightButtons(narrativeData) {
-            elements.insightSelector.innerHTML = "";
-            const insightKeys = {
-                primary: "Briefing",
-                market: "Market",
-                network: "Network"
-            };
-            Object.keys(insightKeys).forEach(key => {
-                if (narrativeData && narrativeData[key]) {
-                    const button = document.createElement("button");
-                    button.textContent = insightKeys[key];
-                    button.className = "insight-button";
-                    button.dataset.key = key;
-                    elements.insightSelector.appendChild(button);
-                    button.addEventListener("click", e => {
-                        updateElement(elements.insight, narrativeData[key]);
-                        document.querySelectorAll(".insight-button").forEach(b => b.classList.remove("active"));
-                        e.target.classList.add("active");
-                    });
-                }
-            });
-        }
+        // Parallax Mouse Interaction
+        elements.perspectiveWrapper.addEventListener("mousemove", e => {
+            const { clientWidth: width, clientHeight: height } = elements.perspectiveWrapper;
+            const x = e.clientX - width / 2;
+            const y = e.clientY - height / 2;
+            const rotateY = 15 * x / (width / 2);
+            const rotateX = -15 * y / (height / 2);
+            
+            elements.heliosWidget.style.transform = `rotateY(${rotateY}deg) rotateX(${rotateX}deg)`;
+            elements.backgroundGrid.style.transform = `translateZ(-200px) rotateX(75deg) rotateY(${-rotateY/2}deg) rotateX(${-rotateX/2}deg)`;
+        });
 
         async function fetchData() {
             try {
@@ -206,12 +170,12 @@
             } else {
                 el.classList.add('text-white');
             }
-            setTimeout(() => el.classList.remove('flash'), 700);
+            setTimeout(() => el.classList.remove('flash'), 400);
         }
 
         function updateDisplay(data) {
             if (!data) return;
-
+            
             updateElement(elements.price, `$${parseFloat(data.market_vector.price_usd).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`, lastData.market_vector?.price_usd);
             const diffChange = parseFloat(data.mining_vector.difficulty_change_percent);
             updateElement(elements.diffChange, `${diffChange.toFixed(2)}%`, lastData.mining_vector?.difficulty_change_percent, diffChange > 0 ? "text-green-400" : "text-red-400");
@@ -246,20 +210,12 @@
                 const change = data.mining_vector.difficulty_change_percent;
                 const duration = Math.max(1.5, 4 / (1 + Math.abs(change) / 2));
                 const hue = Math.max(-20, Math.min(40, change * 15));
-                elements.fusionCore.style.setProperty('--core-pulse-duration', `${duration}s`);
-                elements.fusionCore.style.setProperty('--core-hue-shift', `${hue}deg`);
-                elements.fusionCoreGlow.style.setProperty('--core-pulse-duration', `${duration}s`);
-                elements.fusionCoreGlow.style.setProperty('--core-hue-shift', `${hue}deg`);
+                document.documentElement.style.setProperty('--core-pulse-duration', `${duration}s`);
+                document.documentElement.style.setProperty('--core-hue-shift', `${hue}deg`);
             }
             
             if (data.narrative_vector) {
-                if (!lastData.narrative_vector || JSON.stringify(data.narrative_vector) !== JSON.stringify(lastData.narrative_vector)) {
-                    setupInsightButtons(data.narrative_vector);
-                }
-                updateElement(elements.insight, data.narrative_vector.primary);
-                document.querySelectorAll(".insight-button").forEach(b => b.classList.remove("active"));
-                const activeButton = elements.insightSelector.querySelector('[data-key="primary"]');
-                if (activeButton) activeButton.classList.add('active');
+                updateElement(elements.insight, data.narrative_vector.primary, lastData.narrative_vector?.primary);
             }
             
             elements.timestamp.textContent = `Data Core Forged: ${new Date(data.timestamp_utc).toLocaleString()}`;
