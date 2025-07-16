@@ -1,10 +1,10 @@
 {
-    "timestamp_utc": "2025-07-16T14:24:40.956062+00:00",
+    "timestamp_utc": "2025-07-16T14:25:14.116549+00:00",
     "market_vector": {
         "price_usd": 118424.7
     },
     "mining_vector": {
-        "difficulty_change_percent": 2.1743586509200385,
+        "difficulty_change_percent": 2.1654986480414307,
         "next_retarget_blocks": 1369
     },
     "monetary_vector": {
@@ -18,7 +18,7 @@
         "error": true
     },
     "trend_vector": {
-        "rsi_14d": 69.0743567361976,
+        "rsi_14d": 69.06640568891196,
         "historical_prices": [
             107115.4,
             107325.1,
@@ -39,9 +39,9 @@
             119102.1,
             119855.0,
             117741.0,
-            118424.7
+            118419.8
         ],
-        "price_change_percent": -0.02313171315663355
+        "price_change_percent": -0.004137650338142448
     },
     "singularity_score": 58,
     "narrative_vector": {
