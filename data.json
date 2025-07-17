@@ -1,10 +1,10 @@
 {
-    "timestamp_utc": "2025-07-17T21:45:10.942128+00:00",
+    "timestamp_utc": "2025-07-17T21:50:12.590687+00:00",
     "market_vector": {
-        "price_usd": 120612.5
+        "price_usd": 120663.9
     },
     "mining_vector": {
-        "difficulty_change_percent": -1.4910125750978942,
+        "difficulty_change_percent": -1.5510769623442888,
         "next_retarget_blocks": 1207
     },
     "monetary_vector": {
@@ -18,7 +18,7 @@
         "error": true
     },
     "trend_vector": {
-        "rsi_14d": 72.44760329404701,
+        "rsi_14d": 72.5185578163112,
         "historical_prices": [
             107325.1,
             108387.2,
@@ -39,14 +39,14 @@
             119855.0,
             117741.0,
             118712.6,
-            120612.5
+            120663.8
         ],
-        "price_change_percent": 0.2169480371645081
+        "price_change_percent": 0.042532904964247414
     },
     "singularity_score": 58,
     "narrative_vector": {
-        "primary": "Market sentiment is overheated (RSI: 72). A correction is probable.",
-        "market": "Momentum is neutral (RSI: 72.4). The derivatives market is balanced.",
-        "network": "The -1.49% difficulty adjustment indicates the security baseline is holding steady."
+        "primary": "Market sentiment is overheated (RSI: 73). A correction is probable.",
+        "market": "Momentum is neutral (RSI: 72.5). The derivatives market is balanced.",
+        "network": "The -1.55% difficulty adjustment indicates the security baseline is holding steady."
     }
 }
