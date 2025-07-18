@@ -1,10 +1,10 @@
 {
-    "timestamp_utc": "2025-07-18T17:20:12.353702+00:00",
+    "timestamp_utc": "2025-07-18T17:25:14.114435+00:00",
     "market_vector": {
-        "price_usd": 117737.6
+        "price_usd": 117925.1
     },
     "mining_vector": {
-        "difficulty_change_percent": -1.1449731846428834,
+        "difficulty_change_percent": -1.1980665025285386,
         "next_retarget_blocks": 1088
     },
     "monetary_vector": {
@@ -18,7 +18,7 @@
         "error": true
     },
     "trend_vector": {
-        "rsi_14d": 64.60243040808638,
+        "rsi_14d": 65.25169168173221,
         "historical_prices": [
             108387.2,
             107120.3,
@@ -39,14 +39,14 @@
             117741.0,
             118712.6,
             119321.0,
-            117737.6
+            117925.0
         ],
-        "price_change_percent": 0.03424037764672844
+        "price_change_percent": 0.15916750468838686
     },
     "singularity_score": 55,
     "narrative_vector": {
-        "primary": "ECHO DETECTED: Current structure mirrors the 'Pre-Halving Lull.' A period of consolidation may precede a supply shock.",
-        "market": "High-conviction pattern match. Standard market analysis suspended.",
-        "network": "On-chain fundamentals are secondary to the recognized historical echo."
+        "primary": "The objective remains unchanged. Awaiting a new catalyst.",
+        "market": "Momentum is neutral (RSI: 65.3). The derivatives market is balanced.",
+        "network": "The -1.20% difficulty adjustment indicates the security baseline is holding steady."
     }
 }
