@@ -1,16 +1,16 @@
 {
-    "timestamp_utc": "2025-08-04T05:26:13.309538+00:00",
+    "timestamp_utc": "2025-08-04T05:59:37.034330+00:00",
     "market_vector": {
-        "price_usd": 114294.0
+        "price_usd": 114415.6
     },
     "mining_vector": {
-        "difficulty_change_percent": -0.6034699205004324,
-        "next_retarget_blocks": 704
+        "difficulty_change_percent": -0.5519855622928116,
+        "next_retarget_blocks": 700
     },
     "monetary_vector": {
-        "circulating_supply": 19901600.0,
+        "circulating_supply": 19901612.5,
         "current_block_reward": 3.125,
-        "blocks_until_next_halving": 141488
+        "blocks_until_next_halving": 141484
     },
     "speculative_vector": {
         "open_interest": 0,
@@ -18,7 +18,7 @@
         "error": true
     },
     "trend_vector": {
-        "rsi_14d": 46.37124404282209,
+        "rsi_14d": 46.79336315402339,
         "historical_prices": [
             118712.6,
             119321.0,
@@ -39,11 +39,11 @@
             113290.2,
             112525.2,
             114224.1,
-            114294.0
+            114415.6
         ],
-        "price_change_percent": -0.16256100405223772
+        "price_change_percent": 0.10639228655922954
     },
-    "singularity_score": 47,
+    "singularity_score": 48,
     "narrative_vector": {
         "primary": "ECHO DETECTED: Current structure mirrors the 'Pre-Halving Lull.' A period of consolidation may precede a supply shock.",
         "market": "High-conviction pattern match. Standard market analysis suspended.",
