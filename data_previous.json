@@ -1,16 +1,16 @@
 {
-    "timestamp_utc": "2025-08-21T07:42:04.570515+00:00",
+    "timestamp_utc": "2025-08-21T07:53:03.424641+00:00",
     "market_vector": {
-        "price_usd": 113899.9
+        "price_usd": 113888.6
     },
     "mining_vector": {
-        "difficulty_change_percent": -0.6076764116136113,
-        "next_retarget_blocks": 235
+        "difficulty_change_percent": -0.6127856290807365,
+        "next_retarget_blocks": 234
     },
     "monetary_vector": {
-        "circulating_supply": 19909365.625,
+        "circulating_supply": 19909368.75,
         "current_block_reward": 3.125,
-        "blocks_until_next_halving": 139003
+        "blocks_until_next_halving": 139002
     },
     "speculative_vector": {
         "open_interest": 0,
@@ -18,7 +18,7 @@
         "error": true
     },
     "trend_vector": {
-        "rsi_14d": 43.32963629371421,
+        "rsi_14d": 43.30481222422644,
         "historical_prices": [
             112525.2,
             114224.1,
@@ -39,11 +39,11 @@
             116260.0,
             112830.3,
             114262.7,
-            113899.9
+            113888.6
         ],
-        "price_change_percent": 0.14930084471919777
+        "price_change_percent": -0.009920992028955564
     },
-    "singularity_score": 47,
+    "singularity_score": 46,
     "narrative_vector": {
         "primary": "The objective remains unchanged. Awaiting a new catalyst.",
         "market": "Momentum is neutral (RSI: 43.3). The derivatives market is balanced.",
