@@ -1,16 +1,16 @@
 {
-    "timestamp_utc": "2025-08-25T10:27:30.276642+00:00",
+    "timestamp_utc": "2025-08-25T10:46:32.740405+00:00",
     "market_vector": {
-        "price_usd": 111099.1
+        "price_usd": 111173.4
     },
     "mining_vector": {
-        "difficulty_change_percent": 4.50391749927137,
-        "next_retarget_blocks": 1627
+        "difficulty_change_percent": 4.5134445084661134,
+        "next_retarget_blocks": 1625
     },
     "monetary_vector": {
-        "circulating_supply": 19911315.625,
+        "circulating_supply": 19911321.875,
         "current_block_reward": 3.125,
-        "blocks_until_next_halving": 138379
+        "blocks_until_next_halving": 138377
     },
     "speculative_vector": {
         "open_interest": 0,
@@ -18,7 +18,7 @@
         "error": true
     },
     "trend_vector": {
-        "rsi_14d": 40.03439837813417,
+        "rsi_14d": 40.12322607275397,
         "historical_prices": [
             115010.0,
             117498.1,
@@ -39,14 +39,14 @@
             116817.9,
             115344.1,
             113456.1,
-            111119.1
+            111173.5
         ],
-        "price_change_percent": -0.5033076292160106
+        "price_change_percent": 0.0669672391585478
     },
-    "singularity_score": 46,
+    "singularity_score": 48,
     "narrative_vector": {
-        "primary": "Financial energy is contracting. The market has chosen its short-term direction.",
-        "market": "Momentum is neutral (RSI: 40.0). The derivatives market is balanced.",
-        "network": "The 4.50% difficulty adjustment indicates the security baseline is currently hardening."
+        "primary": "The objective remains unchanged. Awaiting a new catalyst.",
+        "market": "Momentum is neutral (RSI: 40.1). The derivatives market is balanced.",
+        "network": "The 4.51% difficulty adjustment indicates the security baseline is currently hardening."
     }
 }
