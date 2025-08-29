@@ -1,10 +1,10 @@
 {
-    "timestamp_utc": "2025-08-29T16:47:55.245298+00:00",
+    "timestamp_utc": "2025-08-29T16:58:48.348939+00:00",
     "market_vector": {
-        "price_usd": 108820.0
+        "price_usd": 108776.1
     },
     "mining_vector": {
-        "difficulty_change_percent": 5.996653093855642,
+        "difficulty_change_percent": 5.879725504527555,
         "next_retarget_blocks": 974
     },
     "monetary_vector": {
@@ -18,7 +18,7 @@
         "error": true
     },
     "trend_vector": {
-        "rsi_14d": 38.278851513068126,
+        "rsi_14d": 38.23345446762675,
         "historical_prices": [
             119288.4,
             118724.5,
@@ -39,14 +39,14 @@
             111829.3,
             111268.6,
             112563.7,
-            108820.0
+            108789.4
         ],
-        "price_change_percent": 0.20248600139410014
+        "price_change_percent": -0.02811983091344038
     },
     "singularity_score": 48,
     "narrative_vector": {
         "primary": "The objective remains unchanged. Awaiting a new catalyst.",
-        "market": "Momentum is neutral (RSI: 38.3). The derivatives market is balanced.",
-        "network": "The 6.00% difficulty adjustment indicates the security baseline is currently hardening."
+        "market": "Momentum is neutral (RSI: 38.2). The derivatives market is balanced.",
+        "network": "The 5.88% difficulty adjustment indicates the security baseline is currently hardening."
     }
 }
