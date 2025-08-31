@@ -1,10 +1,10 @@
 {
-    "timestamp_utc": "2025-08-31T21:28:51.164601+00:00",
+    "timestamp_utc": "2025-08-31T21:40:08.857361+00:00",
     "market_vector": {
         "price_usd": 109062.5
     },
     "mining_vector": {
-        "difficulty_change_percent": 5.9160158553532405,
+        "difficulty_change_percent": 5.824036478680195,
         "next_retarget_blocks": 640
     },
     "monetary_vector": {
@@ -41,12 +41,12 @@
             108750.0,
             109062.5
         ],
-        "price_change_percent": 0.051740223712245625
+        "price_change_percent": 0.0
     },
     "singularity_score": 48,
     "narrative_vector": {
         "primary": "The objective remains unchanged. Awaiting a new catalyst.",
         "market": "Momentum is neutral (RSI: 39.4). The derivatives market is balanced.",
-        "network": "The 5.92% difficulty adjustment indicates the security baseline is currently hardening."
+        "network": "The 5.82% difficulty adjustment indicates the security baseline is currently hardening."
     }
 }
