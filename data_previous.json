@@ -1,10 +1,10 @@
 {
-    "timestamp_utc": "2025-09-03T11:44:33.673356+00:00",
+    "timestamp_utc": "2025-09-03T11:55:07.978481+00:00",
     "market_vector": {
         "price_usd": 111525.2
     },
     "mining_vector": {
-        "difficulty_change_percent": 6.1148482117517,
+        "difficulty_change_percent": 6.04800025476997,
         "next_retarget_blocks": 241
     },
     "monetary_vector": {
@@ -41,7 +41,7 @@
             111196.9,
             111525.2
         ],
-        "price_change_percent": 0.07860901526952417
+        "price_change_percent": 0.0
     },
     "singularity_score": 51,
     "narrative_vector": {
