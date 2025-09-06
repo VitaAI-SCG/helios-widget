@@ -1,16 +1,16 @@
 {
-    "timestamp_utc": "2025-09-06T11:22:35.777601+00:00",
+    "timestamp_utc": "2025-09-06T11:35:03.406910+00:00",
     "market_vector": {
         "price_usd": 110739.0
     },
     "mining_vector": {
-        "difficulty_change_percent": -8.577750725187549,
-        "next_retarget_blocks": 1851
+        "difficulty_change_percent": -8.540391138789605,
+        "next_retarget_blocks": 1850
     },
     "monetary_vector": {
-        "circulating_supply": 19916915.625,
+        "circulating_supply": 19916918.75,
         "current_block_reward": 3.125,
-        "blocks_until_next_halving": 136587
+        "blocks_until_next_halving": 136586
     },
     "speculative_vector": {
         "open_interest": 0,
@@ -47,6 +47,6 @@
     "narrative_vector": {
         "primary": "The objective remains unchanged. Awaiting a new catalyst.",
         "market": "Momentum is neutral (RSI: 44.7). The derivatives market is balanced.",
-        "network": "The -8.58% difficulty adjustment indicates the security baseline is holding steady."
+        "network": "The -8.54% difficulty adjustment indicates the security baseline is holding steady."
     }
 }
