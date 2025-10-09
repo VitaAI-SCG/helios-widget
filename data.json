@@ -1,16 +1,16 @@
 {
-    "timestamp_utc": "2025-10-09T18:50:01.492150+00:00",
+    "timestamp_utc": "2025-10-09T19:01:21.016736+00:00",
     "market_vector": {
-        "price_usd": 120693.5
+        "price_usd": 120754.9
     },
     "mining_vector": {
-        "difficulty_change_percent": -7.184134278857979,
-        "next_retarget_blocks": 954
+        "difficulty_change_percent": -7.188662595024775,
+        "next_retarget_blocks": 953
     },
     "monetary_vector": {
-        "circulating_supply": 19932318.75,
+        "circulating_supply": 19932321.875,
         "current_block_reward": 3.125,
-        "blocks_until_next_halving": 131658
+        "blocks_until_next_halving": 131657
     },
     "speculative_vector": {
         "open_interest": 0,
@@ -18,7 +18,7 @@
         "error": true
     },
     "trend_vector": {
-        "rsi_14d": 57.40025246249615,
+        "rsi_14d": 57.56209888009331,
         "historical_prices": [
             115739.1,
             115298.9,
@@ -39,9 +39,9 @@
             124766.5,
             121419.8,
             123329.7,
-            120693.4
+            120757.9
         ],
-        "price_change_percent": -0.06168857784229088
+        "price_change_percent": 0.053358300157004455
     },
     "singularity_score": 49,
     "narrative_vector": {
