@@ -1,16 +1,16 @@
 {
-    "timestamp_utc": "2025-10-17T17:42:54.178832+00:00",
+    "timestamp_utc": "2025-10-17T17:53:44.641115+00:00",
     "market_vector": {
-        "price_usd": 106389.9
+        "price_usd": 106450.9
     },
     "mining_vector": {
-        "difficulty_change_percent": 10.877007822324503,
-        "next_retarget_blocks": 1774
+        "difficulty_change_percent": 10.734720609387471,
+        "next_retarget_blocks": 1773
     },
     "monetary_vector": {
-        "circulating_supply": 19936056.25,
+        "circulating_supply": 19936059.375,
         "current_block_reward": 3.125,
-        "blocks_until_next_halving": 130462
+        "blocks_until_next_halving": 130461
     },
     "speculative_vector": {
         "open_interest": 0,
@@ -18,7 +18,7 @@
         "error": true
     },
     "trend_vector": {
-        "rsi_14d": 34.81128630883711,
+        "rsi_14d": 34.766098688764615,
         "historical_prices": [
             112127.8,
             114365.2,
@@ -39,11 +39,11 @@
             113106.2,
             110781.9,
             108182.3,
-            106389.9
+            106351.4
         ],
-        "price_change_percent": 0.11376789091832441
+        "price_change_percent": -0.0361876456317752
     },
-    "singularity_score": 49,
+    "singularity_score": 48,
     "narrative_vector": {
         "primary": "ECHO DETECTED: Current structure shows a pattern match to the '2022 Bear Market Bottom.' Maximum opportunity may be present.",
         "market": "High-conviction pattern match. Standard market analysis suspended.",
