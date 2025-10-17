@@ -1,16 +1,16 @@
 {
-    "timestamp_utc": "2025-10-17T19:59:53.696913+00:00",
+    "timestamp_utc": "2025-10-17T20:28:45.934367+00:00",
     "market_vector": {
-        "price_usd": 106488.1
+        "price_usd": 106965.1
     },
     "mining_vector": {
-        "difficulty_change_percent": 10.33165828750664,
-        "next_retarget_blocks": 1762
+        "difficulty_change_percent": 9.76305312548915,
+        "next_retarget_blocks": 1761
     },
     "monetary_vector": {
-        "circulating_supply": 19936093.75,
+        "circulating_supply": 19936096.875,
         "current_block_reward": 3.125,
-        "blocks_until_next_halving": 130450
+        "blocks_until_next_halving": 130449
     },
     "speculative_vector": {
         "open_interest": 0,
@@ -18,7 +18,7 @@
         "error": true
     },
     "trend_vector": {
-        "rsi_14d": 34.88324128318159,
+        "rsi_14d": 35.505432838584966,
         "historical_prices": [
             112127.8,
             114365.2,
@@ -39,14 +39,14 @@
             113106.2,
             110781.9,
             108182.3,
-            106451.0
+            106969.0
         ],
-        "price_change_percent": -0.07518931091484629
+        "price_change_percent": 0.45159975621688636
     },
-    "singularity_score": 48,
+    "singularity_score": 50,
     "narrative_vector": {
-        "primary": "ECHO DETECTED: Current structure shows a pattern match to the '2022 Bear Market Bottom.' Maximum opportunity may be present.",
-        "market": "High-conviction pattern match. Standard market analysis suspended.",
-        "network": "On-chain fundamentals are secondary to the recognized historical echo."
+        "primary": "The objective remains unchanged. Awaiting a new catalyst.",
+        "market": "Momentum is neutral (RSI: 35.5). The derivatives market is balanced.",
+        "network": "The 9.76% difficulty adjustment indicates the security baseline is currently hardening."
     }
 }
