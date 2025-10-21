@@ -1,16 +1,16 @@
 {
-    "timestamp_utc": "2025-10-21T19:56:01.159562+00:00",
+    "timestamp_utc": "2025-10-21T20:25:09.584566+00:00",
     "market_vector": {
-        "price_usd": 111921.2
+        "price_usd": 110973.1
     },
     "mining_vector": {
-        "difficulty_change_percent": 6.3480928325038155,
-        "next_retarget_blocks": 1163
+        "difficulty_change_percent": 6.2122590785011145,
+        "next_retarget_blocks": 1161
     },
     "monetary_vector": {
-        "circulating_supply": 19937965.625,
+        "circulating_supply": 19937971.875,
         "current_block_reward": 3.125,
-        "blocks_until_next_halving": 129851
+        "blocks_until_next_halving": 129849
     },
     "speculative_vector": {
         "open_interest": 0,
@@ -18,7 +18,7 @@
         "error": true
     },
     "trend_vector": {
-        "rsi_14d": 46.917971771279944,
+        "rsi_14d": 44.98314117710154,
         "historical_prices": [
             120649.9,
             122259.5,
@@ -39,14 +39,14 @@
             107199.0,
             108669.8,
             110574.4,
-            111921.3
+            110973.2
         ],
-        "price_change_percent": 0.10849731663685412
+        "price_change_percent": -0.8470245136756933
     },
-    "singularity_score": 52,
+    "singularity_score": 48,
     "narrative_vector": {
-        "primary": "ECHO DETECTED: Current structure mirrors the 'Pre-Halving Lull.' A period of consolidation may precede a supply shock.",
-        "market": "High-conviction pattern match. Standard market analysis suspended.",
-        "network": "On-chain fundamentals are secondary to the recognized historical echo."
+        "primary": "Financial energy is contracting. The market has chosen its short-term direction.",
+        "market": "Momentum is neutral (RSI: 45.0). The derivatives market is balanced.",
+        "network": "The 6.21% difficulty adjustment indicates the security baseline is currently hardening."
     }
 }
